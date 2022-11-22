@@ -56,6 +56,33 @@ templates are of two types  i) static and ii) dynamic
 
 templates can be saved inside each app also common template can be used
 
+---
+
+
+
+## 22 November 2022
+
+###### 1. Today, i learned more about templates in django
+
+both common and separate templates folder can be used at the same time 
+
+###### 2. Today , i learned about static files in django
+
+files like JS, CSS, images, videos are static files
+
+we must load static files before using in templates using 
+
+> {%load static%}
+
+ ###### common variables
+
+- **STATIC_URL** : is the URL to use when referring to static file located in STATIC_ROOT
+- **STATIC_ROOT**: is absolute path to directory where collectstatic will collect static files for deployment
+- **STATICFILES_DIRS**: defines the additional locations 
+- **STATICFILES_STORAGE**: is file storage engine to use when  collecting static files
+
+###### 3. Today, i learned about exception handling in python 
+
 
 
 
