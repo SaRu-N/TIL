@@ -83,6 +83,25 @@ we must load static files before using in templates using
 
 ###### 3. Today, i learned about exception handling in python 
 
+---
+
+## 23 November 2022
+
+###### 1. Today , i learned about  iterators, generators, closure, decorators, property, regular expression in python
+
+- **closure** in python is technique by which some data gets attached to the code
+
+- python **decorator** is a function that takes in a function, adds some functionality to it and returns original function
+- An underscore `_` at the beginning is used to denote private variables in Python
+- In Python, **property()**  is a built-in function that creates and returns a property object. 
+- `property(fget=None, fset=None, fdel=None, doc=None)`
+- A **Regular Expression (RegEx)** is a sequence of characters that defines a search pattern. 
+- we use r or R prefix to denote raw string while working with RegEx
+
+
+
+
+
 
 
 
