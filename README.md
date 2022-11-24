@@ -90,7 +90,6 @@ we must load static files before using in templates using
 ###### 1. Today , i learned about  iterators, generators, closure, decorators, property, regular expression in python
 
 - **closure** in python is technique by which some data gets attached to the code
-
 - python **decorator** is a function that takes in a function, adds some functionality to it and returns original function
 - An underscore `_` at the beginning is used to denote private variables in Python
 - In Python, **property()**  is a built-in function that creates and returns a property object. 
@@ -98,7 +97,37 @@ we must load static files before using in templates using
 - A **Regular Expression (RegEx)** is a sequence of characters that defines a search pattern. 
 - we use r or R prefix to denote raw string while working with RegEx
 
+---
 
+## 24 November 2022
+
+###### 1. Today, i learned about datetime module ,time module, handling timezone, multi-threading in python
+
+**Commonly used classes in datetime modules**
+
+- ***datetime.date*** : any date object represents a day (year, month and day)
+- ***datetime.time*** : any time object represents local time
+- ***datetime.datetime***: contains both date and time objects
+- ***datetime.timedelta***: any timedelta object represents the difference between two dates or times (can perform arithmetic operation)
+- ***datetime.fromtimestamp()***:returns local date and time from timestamp
+- ***datetime.timestamp()***:returns timestamp from a datetime
+
+**Commonly used time-related functions**
+
+- ***time.time()***:returns number of seconds passed since epoch
+- ***time.sleep()***:delays execution of the current thread for the given number of seconds
+- ***time.localtime()***: returns `struct-time` in local time
+
+**Methods to handle datetime format**
+
+we make use of format codes here like %m for months %d for day %Y for year and many more
+
+- ***strftime()***: returns string representing date and time for datetime object
+- ***strptime()***:creates datetime object from a given string
+
+To handle timezone in python we use model pytz
+
+**we use `threading.Thread(target=<value>` to perform multi-threading in python** 
 
 
 
