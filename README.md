@@ -129,6 +129,32 @@ To handle timezone in python we use model pytz
 
 **we use `threading.Thread(target=<value>` to perform multi-threading in python** 
 
+---
+
+## 25 November 2022
+
+###### 1. Today, I learned about OOPS concepts in python
+
+- ***Class***: blueprint for object
+
+- ***Object***: instance of class
+
+- ***Encapsulation***: way to restrict the direct access to some components of an object (to define private we use `_` or` __`)
+
+- ***Inheritance***: way of creating a new class for using details of an existing class without modifying it
+
+- ***Polymorphism***: ability to use a common interface for multiple forms
+
+- ***super()***:returns proxy object that allows us to access methods of base class
+
+- ***Operator Overloading***: extended meaning beyond predefined operational meaning of operators (we use **Magic Methods** to overload operators)
+
+- ***Method Resolution Order (MRO)***:the set of rules used to find the search order in multiple inheritance
+
+- ***Magic Methods***: special methods that start and end with the double underscores
+
+   
+
 
 
 
