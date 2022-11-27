@@ -155,11 +155,54 @@ To handle timezone in python we use model pytz
 
    
 
+---
+
+## 27 November 2022
 
 
 
+###### 1. Today I, learned about Template inheritance with static files in django
 
+- ***extends*** tag is used to inherit templates
 
+- `{% extends 'parent_template with location' %}` 
 
+- ***block*** tag is used to override specific parts of template
 
+- `{% block blockname %}` and for ending `{%endblock blockname%}` 
 
+- **Rules**
+
+  - If we use extend tag, it must be first template tag
+
+  - Its better to use more blocks in parent template
+
+  - Child template don't have to define all parent blocks
+
+  - We can't define multple block having same name in same template
+
+  - `{{block.super}}` is used along with block tag in child template to get the content of the block from parent template
+
+    
+
+###### 2. Today, I learned how to use Bootstrap and Font Awesome in django project
+
+###### 3. Today, I learned to create Hyperlinks and Use url Tag in django
+
+- ***url tag*** : retunrs an absolute path reference matching a given view and optional parameter
+  - `{%url 'urlname' %}` `{%url 'urlname' as var %}` 
+
+- ***path()***: returns an element for inclusion in urlpatterns
+
+  - > path(route,view,kwargs=None,Name='urlname'/None)
+
+###### 4. Today i  learned to include template inside another template
+
+- ***include tag***: loads a template and renders it with the current context
+
+  - `{%include temp_var_name%}` or `{%include 'templaye_name.html'%}` 
+
+  - we can pass additional context explicitly to the template using `with` keyword
+  - `{% include "any_template" with a="anything" b="another thing"%}``{% include "course.html" with d="Django" p="PHP"%}`
+  - we can render the context only with the variables provided using `only` option
+  - `{% include "course.html" with "PHP" only%}`
