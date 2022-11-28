@@ -206,3 +206,15 @@ To handle timezone in python we use model pytz
   - `{% include "any_template" with a="anything" b="another thing"%}``{% include "course.html" with d="Django" p="PHP"%}`
   - we can render the context only with the variables provided using `only` option
   - `{% include "course.html" with "PHP" only%}`
+
+---
+
+## 28 November 2022
+
+###### 1. Today, I learned about github commit
+
+- ***Commits***: are snapshots of entire repository at specific times... based around logical units of change
+- **Tips for writing commit **:
+  - Outline your narrative, and recognize commits to match it
+  - Make each commit both "small" and "atomic"
+  - Describe what you’re doing and why you’re doing it in the commit message.
