@@ -218,3 +218,70 @@ To handle timezone in python we use model pytz
   - Outline your narrative, and recognize commits to match it
   - Make each commit both "small" and "atomic"
   - Describe what you’re doing and why you’re doing it in the commit message.
+
+---
+
+## 29 November 2022
+
+###### 1. Today, I learned about cookies
+
+###### 2. Today I learned about ORM, QuerySet , Model, Fetching data from DB, admin application, register model class,ModelAdmin Class in Django
+
+- ***ORM***: Object Relational Mapper, enables application to interact with database
+
+  - ***ORM***  automatically creates a database schema from defined classes or models
+  - ***ORM*** maps objects attributes to respective table fields
+
+- ***QuerySet***: list containing all objects we have created using Django model
+
+- ***QuerySet***: generally associated with CRUD applications
+
+- ***Model***: single definitive source of information (essential fields and behavior) about data where each model maps to a single database table
+
+- ***Model Class***: class which will represent a table in database
+
+  - each model is a subclass of django.db.models.Model
+
+  - each attribute of model represents a database field
+
+  - syntax: 
+
+    `class ClassName(models.Model):`
+
+    ​	`field_name=models.FieldType(arg,options)`
+
+    - this class will create a table with columns and their data types
+    - Table name= ApplicationName_ClassName
+    - Column name=field_name
+
+- ***Migrations***: are Django's way of propagating changes in models into respective database schema
+  - ***makemigrations***: responsible for creating new migrations based on the changes in models
+  - ***migrate***: responsible for applying and unapplying migrations
+  - ***sqlmigrate***: displays the SQL statements for a migratiom
+  - ***showmigrations***: lists a project's migrations and their status
+
+- ***all()***:returns a copy of current QuerySet or QuerySet Subclass
+  `ModelClassName.objects.all()`
+
+- ***get(pk=value)***:returns object having primary key==value `ModelClassName.objects.get(pk=2)`
+- ***Super User***: used to login into admin interface of admin application
+   `python manage.py createsuperuser`
+
+- ***__str__()***:returns human-readable representation of model 
+  we include this inside class in models.py folder 
+  `def __str__(self):  `
+  `return self.fieldName`
+
+- ***ModelAdmin Class***: is the representation of model in admin interface we use this class inside admin.py file of application folder
+  **Creating Class**: `Class ModelAdminClassName(admin.ModelAdmin):  ModelAdmin Options=('fieldname1','fieldname2'....)`
+
+  **Register Class**: `admin.site.register(ModelClassName, ModelAdminClassName)`
+
+  A **decorator** can be used to register ModelAdmin Classes
+  `@admin.register(ModelClassName1,ModelClassName2,...)`
+   `Class ModelAdminClassName(admin.ModelAdmin):  ModelAdmin Options=('fieldname1','fieldname2'....)`
+
+  ***ModelAdmin Options***
+
+  - list_display(): controls which fields are displayed on the change list page of admin (value must be list or tuple)
+    
