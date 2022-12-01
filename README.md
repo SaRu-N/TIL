@@ -284,4 +284,42 @@ To handle timezone in python we use model pytz
   ***ModelAdmin Options***
 
   - list_display(): controls which fields are displayed on the change list page of admin (value must be list or tuple)
-    
+
+---
+
+## 30 November 2022
+
+###### 1. Today, i learned about Django Forms,id Attribute, dynamic initial values, ordering form field, rendering form fields,Loop Form, Form FIeld ,Form Arguments in Django
+
+- Create Django Form using Form Class
+
+  `from django import forms`
+
+  `class FormClassName(forms.Form):`
+
+  ​	`label=froms.FieldType()`
+
+  ​	`label froms.FieldType(label='display_label')`
+  `label=forms.FieldType(widget=forms.HiddenInput)` for hidden field
+
+- Id Attribute can be configured using `auto_id` parameter while creating object of Form class
+  - `auto_id = True` : use field name as its id for each form field
+  - `auto_id='formatstring with %s'`: id attribute is based upon the format string
+  - `auto_id = False` : will not include <label> tags nor id attributes
+  - `auto_id = 'string without %s'` : acts as if auto_id is True
+
+- Dynamic Initial value `initial` is used to declare initial value of form fields at runtime.
+- ***Ordering Form Field***:
+  `fm=FormClassName()`
+  `fm.order_fields(field_order=['fieldname1','fieldname2',...])`
+- FIeld Arguments:
+  - `required`: specifies that the field value is required or not
+  - `label`: specifies the 'human-friendly' label for field
+  - `label_suffix`: lets us to override the form's label_suffix on a per-field basis
+  - `initial`: lets us specify initial value in an unbound Form
+  - `disabled`: when true it desables a form field 
+  - `help_text`:lets us specify descriptive text for this Field
+  - `error_messages`: lets us override default messages that the field will rise
+  - `validators`: lets us provide a list of validation functions for the field
+  - `localize`: enables the localization of form data input as well as rendered output
+  - `widget`: is Django's representation of HTML input elements and lets us specify a widget class to use when rendering the field
