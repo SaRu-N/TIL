@@ -323,3 +323,131 @@ To handle timezone in python we use model pytz
   - `validators`: lets us provide a list of validation functions for the field
   - `localize`: enables the localization of form data input as well as rendered output
   - `widget`: is Django's representation of HTML input elements and lets us specify a widget class to use when rendering the field
+
+---
+
+## 1 December 2022
+
+###### 1. Today, I learned about Widget in Django Form, GET and POST method, CSRF token, Field Validation, HttpesponseRedirect, FieldType, Cleaning and Validating Specific Field
+
+- **Widget** is Django's representation of HTML input elements and lets us specify a widget class to use when rendering the field
+- **Widget** deals with rendering of HTML form input elements on the web page and extraction of raw submitted data
+- Built-in Widgets
+  - TextInput, NumberInput, EmailInput, URLInput, PasswordInput, HiddenInput, DateInput ,DateTimeInput, TimeInput, Textarea, Select, SelectMultiple, RadioSelect, FileInput, etc. 
+
+- **is_valid()**: method used to run validation 
+  syntax: `Form.is_valid()` 
+
+- ***cleaned_data***: attribute used to access clean data
+
+- we use **HttpResponseRedirect** to redirect to any other page
+
+  - ```
+    response = HttpResponseRedirect(response item)
+    ```
+
+- Built-in Fields
+
+```html
+<table>
+    <tr>
+        <th>Fields</th>
+        <th>Default widget</th>
+        <th>Validators</th>
+        <th>Error Message Keys</th>
+    </tr>
+    <tr>
+        <td>CharField</td>
+        <td>TextInput</td>
+        <td> MaxLengthValidator, MinLengthValidator</td>
+        <td> required, max_length, min_length</td>
+    </tr>
+    <tr>
+        <td>BooleanField</td>
+        <td>CheckBoxInput</td>
+        <td>-</td>
+        <td> required</td>
+    </tr>
+    <tr>
+        <td>IntegerField</td>
+        <td>NumberInput when Field.localize is False, else TextInput</td>
+        <td>MaxValueValidator, MinValueValidator</td>
+        <td> required, invalid, max_value, min_value</td>
+    </tr>
+     <tr>
+        <td>FloatField</td>
+        <td>NumberInput when Field.localize is False, else TextInput</td>
+        <td>MaxValueValidator, MinValueValidator</td>
+        <td> required, invalid, max_value, min_value</td>
+    </tr>
+    <tr>
+        <td>DecimalField</td>
+        <td>NumberInput when Field.localize is False, else TextInput</td>
+        <td>MaxValueValidator, MinValueValidator</td>
+        <td>required, invalid, max_value, min_value, max_digits,max_decimal_places, max_whole_digits</td>
+    </tr>
+    <tr>
+        <td>SlugField</td>
+        <td>TextInput</td>
+        <td>validate_slug, or validate_unicode_slug</td>
+        <td> required, invalid</td>
+    </tr>
+    <tr>
+        <td>EmailField</td>
+        <td>EmailInput</td>
+        <td>EmailValidator</td>
+        <td> required, invalid</td>
+    </tr>
+    <tr>
+        <td>URLField</td>
+        <td>URLInput</td>
+        <td>URLValidator</td>
+        <td> required, invalid</td>
+    </tr>
+    <tr>
+        <td>DateField</td>
+        <td>DateInput</td>
+        <td>datetime.date, datetime.datetime</td>
+        <td> required, invalid</td>
+    </tr>
+    <tr>
+        <td>TimeField</td>
+        <td>TimeInput</td>
+        <td>datetime.date, datetime.datetime</td>
+        <td> required, invalid</td>
+    </tr>
+    <tr>
+        <td>FileField</td>
+        <td>ClearableFileInput</td>
+        <td>-</td>
+        <td> required, invalid, missing,empty,max_length</td>
+    </tr>
+    <tr>
+        <td>ImageField</td>
+        <td>ClearableFileInput</td>
+        <td>FileExtensionValidator</td>
+        <td> required, invalid, missing, empty, invalid_image</td>
+    </tr>
+</table>
+```
+
+- ***clean_<fieldname>()***: used in form subclass to validate specific field
+  `def clean_fieldname(self): `
+
+  ​	`var =self.cleaned_data['fieldname']`
+
+  ​	`//validation code here`	
+
+- ***clean()***: in form subclass is responsible for running __python(),validate() and run_validators() to validate complete Django form at once`Form.clean()`
+
+​		`def clean(self): `
+
+​			`cleaned_data =super().clean()`
+
+​			`var =self.cleaned_data['fieldname1']`
+
+​			`//validation code here`	
+
+​			`var =self.cleaned_data['fieldname2']`
+
+​			`//validation code here`	
