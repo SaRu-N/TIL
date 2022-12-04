@@ -450,83 +450,68 @@ To handle timezone in python we use model pytz
 
 ​			`//validation code here`	
 
-> <table>
->     <tr>
->         <th>Fields</th>
->         <th>Default widget</th>
->         <th>Validators</th>
->         <th>Error Message Keys</th>
->     </tr>
->     <tr>
->         <td>CharField</td>
->         <td>TextInput</td>
->         <td> MaxLengthValidator, MinLengthValidator</td>
->         <td> required, max_length, min_length</td>
->     </tr>
->     <tr>
->         <td>BooleanField</td>
->         <td>CheckBoxInput</td>
->         <td>-</td>
->         <td> required</td>
->     </tr>
->     <tr>
->         <td>IntegerField</td>
->         <td>NumberInput when Field.localize is False, else TextInput</td>
->         <td>MaxValueValidator, MinValueValidator</td>
->         <td> required, invalid, max_value, min_value</td>
->     </tr>
->      <tr>
->         <td>FloatField</td>
->         <td>NumberInput when Field.localize is False, else TextInput</td>
->         <td>MaxValueValidator, MinValueValidator</td>
->         <td> required, invalid, max_value, min_value</td>
->     </tr>
->     <tr>
->         <td>DecimalField</td>
->         <td>NumberInput when Field.localize is False, else TextInput</td>
->         <td>MaxValueValidator, MinValueValidator</td>
->         <td>required, invalid, max_value, min_value, max_digits,max_decimal_places, max_whole_digits</td>
->     </tr>
->     <tr>
->         <td>SlugField</td>
->         <td>TextInput</td>
->         <td>validate_slug, or validate_unicode_slug</td>
->         <td> required, invalid</td>
->     </tr>
->     <tr>
->         <td>EmailField</td>
->         <td>EmailInput</td>
->         <td>EmailValidator</td>
->         <td> required, invalid</td>
->     </tr>
->     <tr>
->         <td>URLField</td>
->         <td>URLInput</td>
->         <td>URLValidator</td>
->         <td> required, invalid</td>
->     </tr>
->     <tr>
->         <td>DateField</td>
->         <td>DateInput</td>
->         <td>datetime.date, datetime.datetime</td>
->         <td> required, invalid</td>
->     </tr>
->     <tr>
->         <td>TimeField</td>
->         <td>TimeInput</td>
->         <td>datetime.date, datetime.datetime</td>
->         <td> required, invalid</td>
->     </tr>
->     <tr>
->         <td>FileField</td>
->         <td>ClearableFileInput</td>
->         <td>-</td>
->         <td> required, invalid, missing,empty,max_length</td>
->     </tr>
->     <tr>
->         <td>ImageField</td>
->         <td>ClearableFileInput</td>
->         <td>FileExtensionValidator</td>
->         <td> required, invalid, missing, empty, invalid_image</td>
->     </tr>
-> </table>
+---
+
+## 4 December 2022
+
+###### 1. Today, I learned about built-in validators, custom form validators, match two field value, styling field error, save data to database using django form api
+
+- Built-in validators are available in django.core module
+  - `from django.core import validators`
+    `fieldname=forms.FieldType(validators=[validators.<required validation>])`
+
+- we can define our own validator as per requirement
+
+  - suppose we have to take input starting with s :
+
+    `def starts_with_s(value):`
+    	` if value[0]!='s':`
+    			` raise forms.ValidationError("Value must start with s")`
+
+​			`fieldname=forms.FieldType(validators=[starts_with_s])`
+
+- to render errors
+  -  `{{field.errors}}` to display all errors in same field at the same time `{% for error in field.errors %}`
+  - `{{form.non_field_errors}}` written at the top of the form and template lookup for errors on each field
+
+- Styling Django form errors
+  - we can use class `errorlist` to style errors
+  - `error_css_class` and `required_css_class` : are class hooks that can be used to add class attributes to required rows or rows with errors.(rows should be given "error" and/or "required" classes as per requirement)
+
+- To save data into database using django form api 
+
+  - code inside function of views.py
+
+    `if formvar.is_valid():`
+
+    ​		`var1= formvar.cleaned_data['fieldname1']`
+
+    ​	   `var2= formvar.cleaned_data['fieldname2']`
+
+      	  `var=model_name(fieldname1=var1,fieldname2=var2)`
+
+    ​        `var.save()`
+
+  - here `save()` method is used to save data in database
+
+  - if we provide specific id in var and save var it updates the value having that id
+
+  - to delete specific data :
+
+    - we only write that specific id in var 
+    - instead of var.save() we write `var.delete()`
+
+###### 2. Today i learned about model form in Django
+
+-  ***ModelForm***: is a helper class provided by django that lets us create a Form class from a Django Model
+
+  - create ModelForm class (Model class must be created)
+    syntax: in forms.py
+
+    ​	`class ModelFormClassName(forms.ModelForm):`
+
+    ​		`class Meta:`
+    ​				`model=ModelClassName`
+    ​				`fields=['fieldname1','fieldname2','fieldname3']` form comes in the same order 
+
+  
