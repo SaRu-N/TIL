@@ -516,3 +516,81 @@ To handle timezone in python we use model pytz
 
   
 
+---
+
+## 5 November 2022
+
+###### 1. Today, I learned about Model Form, adding label,help text,error messages ,widgets, validators to fields of Model Form, CRUD using ModelForm
+
+- some important points to be considered while using Model Form:
+  - if model field has `blank=True` then required is st to False on that form field
+  - form field's `label` is set to `verbose_name` of the model field, with first character capitalized
+  - form field's `help_text` is set to the `help_text` of the model field
+
+- adding label to fields
+  `labels= {'fieldname1':'label1','fieldname2':'label2','fieldname2':'label2'}`
+
+- adding help text to fields 
+
+  `help_texts={'fieldname1':'help text here'}`
+
+- adding error messages 
+  `error_messages ={'fieldname1':{'required':'message here'}, 'fieldname2':{'required':'message here'}}`
+- adding widgets 
+  `widget={'fieldname1':widgetvalue,'fieldname2':widgetvalue}`
+- adding validators (before Meta class)
+  `'fieldname'=forms.FieldType(Validations Here)`
+- **Save() Method**: creates and saves a database object from the data bound to the form.
+  - subclass of ModelForm can accept an existing model instance as keyword argument instance, if this is supplied, save() will update that instance
+  - if not supplied, save() will create a new instance of the specified model.
+  - if the form hasn't been validated, calling `save()` will do so by checking form.errors
+  - Syntax: `save(commit=False/True)` 
+
+###### 2. Today i learned about Dynamic URL, Custom Path Converters in Django
+
+- normal url pattern:
+  `path(route,views,kwargs=None,name=None)`
+
+- dynamic url pattern:
+  `path(route/<id>,views,kwargs=None,name=anyname)`
+
+  `path(route/<int:id>,views,kwargs=None,name=anyname)`
+  `path(route/<int:id>/<int:subid>,views,kwargs=None,name=anyname)`
+
+- **Path Converters**:
+  - ***str***: matches any non-empty string excluding '/'. this is default if no path path converter is included
+  - ***int***: matches zero or any positive integer. Returns an int
+  - ***slug***: matches any slug string consisting of ASCII letters or numbers, hyphen, underscore characters
+  - ***uuid***: matches a formatted UUID. Returns a UUID instance
+  - ***path***: matches any non-empty string including '/'. this allows us to match against a complete URL path rather than a segment of a URL path as with str
+
+- **Custom Path Converters**:
+
+  - we can create custom path converter by following below steps
+
+    1. **create a path converter class inside converters.py file**
+
+    `class ClassName:`
+
+    ​	`regex = 'your regex here'`
+
+    ​	`def to_python(self,value):`
+    ​				`return int(value)`
+
+       `def to_url(self,value):`
+    	             `return '%04d' % value`
+
+    Here,
+
+    - ***regex*** is an attribute, as a string
+    - ***to_python(self,value)*** method handles converting the matched string into the type that should be passed to the view function.
+    - ***to_url(self,value)*** method handles conveting the Python type into a string to be used in the URL
+      2. **Register path converter in urls.py**
+         `from django.urls import register_converter`
+         `from . import converters`
+         `register_converter(converters.ClassName,'anyname')`
+         `path('route/<anyname:value>/',views,kwargs,name)` 
+
+- **Kwargs**: this argument allows us to pass additional arguments to view function or method. It should be a dictionary
+
+  - `path(route/views,{'check':'Ok},name=None)` here {'check':'Ok} is kwargs this goes in views function
