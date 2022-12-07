@@ -594,3 +594,106 @@ To handle timezone in python we use model pytz
 - **Kwargs**: this argument allows us to pass additional arguments to view function or method. It should be a dictionary
 
   - `path(route/views,{'check':'Ok},name=None)` here {'check':'Ok} is kwargs this goes in views function
+
+---
+
+## 7 December 2022
+
+###### 1. Today, i learned about selecting modelForm Fields, ModelForm Inheritance, Messages Framework
+
+- Selecting ModelForm Field
+  - using fieldname
+    `fields=['fieldname1','fieldname2','fieldname3']`
+  - using `__all__`
+    `fields='__all__'`
+  - using exclude: this excludes the mentioned field and display other fields as form
+    `exclude=['fieldname']`
+
+- ModelForm Inheritance
+
+  - Base Class
+
+    ​	`class ModelFormBaseClassName(forms.ModelForm):`
+
+    ​		`class Meta:`
+    ​				`model=ModelClassName`
+    ​				`fields=['fieldname1','fieldname2','fieldname3']` 
+
+  - Derived Class
+
+    ​	`class ModelFormDerivedClassName(ModelFormBaseClassName):`
+
+    ​		`class Meta(ModelFormBaseClassName.Meta:`
+    ​				`fields=['fieldname1','fieldname2','fieldname3']` 
+
+- The message framework allows us to temporarily store messages in one request and retrieve them for display in a subsequent request
+
+- **Message Level**: allows us to group messages by type so they can be filtered or displayed differently in views and templates
+
+- **Message Tag**: are a string representation of the message level plus any extra tags that were added directly in the view.
+
+  > <table>
+  >     <tr>
+  >         <th>Level</th>
+  >         <th>Tag</th>
+  >         <th>Value</th>
+  >         <th>Purpose</th>
+  >     </tr>
+  >     <tr>
+  >         <td>DEBUG</td>
+  >         <td>debug</td>
+  >         <td>10</td>
+  >         <td>development related messages that will be ignored or removed in a production deployment</td>
+  >     </tr>
+  >     <tr>
+  >     	<td>INFO</td>
+  >         <td>info</td>
+  >         <td>20</td>
+  >         <td>information messages for the user</td>
+  >     </tr>
+  >         <tr>
+  >     	<td>SUCCESS</td>
+  >         <td>success</td>
+  >         <td>25</td>
+  >         <td>an action was successful</td>
+  >     </tr>
+  >         <tr>
+  >     	<td>WARNING</td>
+  >         <td>warning</td>
+  >         <td>30</td>
+  >         <td>a failure did not occur but may be imminent</td>
+  >     </tr>
+  >         <tr>
+  >     	<td>ERROR</td>
+  >         <td>error</td>
+  >         <td>40</td>
+  >         <td>an action was not successful or some other failure occured</td>
+  >     </tr>
+  > </table>
+  >
+  > 
+
+- How to use message framework
+
+  - ***Write Message***: `add_message(request,level,message, extra_tags='',fail_silently=False)`  - this methid is used to add/write messages.
+
+    `from django.contrib import messages`
+    `messages.add_message(request,level,message,  extra_tags='')`
+
+  - ***Write message by Shortcut method***:
+
+    `from django.contrib import messages`
+    `messages.tag(request,message)`
+
+  - ***Display Message***:
+
+    `{% if messages %}`
+             `{% for m in messages %}`
+                         `{% if messages.tags %} {{messages.tags}} {% endif %}`
+                          `{{m}}`
+
+    ​        ` {% endfor %}`
+
+    `{% endif %}`
+
+    
