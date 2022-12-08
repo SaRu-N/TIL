@@ -670,8 +670,6 @@ To handle timezone in python we use model pytz
   >         <td>an action was not successful or some other failure occured</td>
   >     </tr>
   > </table>
-  >
-  > 
 
 - How to use message framework
 
@@ -689,7 +687,7 @@ To handle timezone in python we use model pytz
 
     `{% if messages %}`
              `{% for m in messages %}`
-                         `{% if messages.tags %} {{messages.tags}} {% endif %}`
+                         `{% if m.tags %} {{m.tags}} {% endif %}`
                           `{{m}}`
 
     ​        ` {% endfor %}`
@@ -697,3 +695,80 @@ To handle timezone in python we use model pytz
     `{% endif %}`
 
     
+
+---
+
+## 8 December 2022
+
+###### 1. Today, i learned about Methods, Changing Tags in Message Framework
+
+-  Methods
+
+  - ***get_level()***: this method is used to retrieve the current effective level.
+
+    `current_level =messages.get_level(request)`
+
+  - ***set_level()***: this method is used to set minimum recorded level
+    `messages.set_level(request,messages.DEBUG)` this will record messages with a level of DEBUG and higher
+
+  - ***get_messages(request)***:this method is used to get message  (if we want to get message outside template)
+    `from django.contrib.messages import get_messages`
+    `storage = get_messages(request)`
+    `for message in storage:`
+
+    `do_whatever_you_want_to_do_with_message(message)`
+
+- Change Tags
+  - open settings.py
+    `from django.contrib.messages import constants
+    MESSAGE_TAGS={constants.level:'new_tag'}`
+
+###### 2. Today, i learned about authentication and authorization, User Authentication System in Django, Change user password with or without old password
+
+- **Authentication**: is about validating credentials to verify identity
+- **Authorization**: is the process to determine whether the authenticated user has access to the particular resources.
+- Django authentication provides both authentication and authorization together
+- User Object Fields
+  - username: may contain alphanumeric,_,@,+,.and - characters and max_length=150, required
+  - first_name:optional, max_length=30
+  - last_name:optional, max_length=150
+  - email:optional
+  - password: required, django doesn't store raw password
+  - groups: Many-to-many relationship to Group
+  - user_permissions: Many-to-many relationship to permission
+  - is_staff: Designates whether this user can access the admin site
+  - is_superuser:Designates that this user has all permissions without explicitly assigning them
+  - is_active:Designates whether this user account should be considered active
+  - last_login: a datetime of user's last login
+  - date_joined: a datetime designating when account was created
+  - is_authenticated: way to tell if the user has been authenticated
+  - is_anonymous: way of differentiating user and anonymous user objects
+
+- User Objects Method
+  - get_username(): returns username for the user
+  - get_full_name(): returns first_name and last_name with space in between
+  - get_short_name(): returns the first_name
+  - set_password(raw_password): sets user's password to the given raw string, taking care of the password hashing
+  - check_password(raw_password): returns true if the given raw string is the correct password for the user.
+  - get_user_permission(obj=None):returns a set of permission strings that the user has directly
+  - email_user(subject,message, from_email=None,**kwargs):sends an email to the user
+
+- UserManager Methods
+  - create_user(username,email=None,password=None,**extra_fields):creates,saves and returns an User
+  - create_superuser(username,email=None,password=None,**extra_fields):same as create_user(), but sets is_staff and is_superuser to True
+
+- Group Object Fields
+  - name: required, max_length=150
+  - permissions: Many-to-many field to permission
+
+- Permission Object Fields
+  - name: required, max_length=255
+  - content_type: a reference to django_content_type database table, which contains a record for each installed model, requires
+  - codename: required, max_length=100
+
+- ***authenticate(request=None, \*\*credentials)***: used to verify a set of credentials
+- ***login(request,user, backend=None)***: to log a user in from a view use login()
+- ***logout(request)***: to log out a user who has been logged in via django.contrib.auth.login() 
+- to change password using old password we use  `PasswordChangeForm()`
+- to change password without using password we use `SetPasswordForm()` 
+  both  `PasswordChangeForm()` and `SetPasswordForm()`  are defined in django.contrib.auth.forms
