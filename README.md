@@ -825,3 +825,60 @@ To handle timezone in python we use model pytz
   - ***get_signed_cookie()***:
     syntax: `HttpResponse.get_signed_cookie(key,default=RAISE_ERROR,salt='',max_age=None)`
 
+---
+
+## 14 December 2022
+
+###### 1. Today, i learned about Session in Django
+
+- Session stores data on server side and abstracts the sending and receiving of cookies . Cookies contain a session Id not the data itself.
+- Types of sessions
+  - database-backed sessions: must add `django.contrib.sessions` in INSTALLED_APPS
+  - file-based sessions :set the SESSION ENGINE setting to `django.contrib.sessions.backends.file` 
+  - cookie-based sessions: set the SESSION ENGINE setting to `django.contrib.sessions.backends.signed_cookies`
+  - cached sessions
+- Using sessions in views
+  - Set Item:
+    `request.session['key']='value'`
+  - Get Item
+    `returned_value = request.session['key']`
+    `returned_value = request.session.get('key', default=None)`
+  - Delete Item
+    `del request.session['key']`
+  - contains
+    `key in request.session`
+
+- Session Methods
+  - keys(): returns a view object that displays a list of all the keys in the dictonary 
+    syntax: `dict.keys()`
+  - items(): returns the list with all dictionary keys with values
+    syntax: `dict.items()`
+  - clear(): used to erase all the elements of list
+    syntax: `dict.clear()`
+  - setdefault(): returns the value of a key if the key is in dictionary else inserts key with a value to the dictionary 
+    syntax: `dict.setdefault(key,default_value)`
+  - flush(): deletes current session data from the session and deletes the session cookie
+    syntax: `dict.flush()`
+  - get_session_cookie_age(): returns the age of session cookies, in seconds.
+  - set_expiry(value): sets the expiration time for the session
+  - get_expiry_age(): returns number of seconds until this session expires
+  - get_expiry_date(): returns the date this session will expire
+  - get_expire_at_browser_close(): returns either True or False
+  - clear_expires(): removes expired sessions from the session store
+  - set_test_cookie(): sets a cookie to determine whether the user's browser supports cookies.
+  - test_cookie_worked(): returns either True or False, depending on whether the user's browser accepted the test cookie.
+  - delete_test_cookie(): deletes the test cookie
+
+- Session Settings
+  - SESSION_CACHE_ALIAS: while using cache-based session, this selects the cache to use. Default= 'default'
+  - SESSION_COOKIE_AGE: age of session in seconds. Default = 1209600 
+  - SESSION_COOKIE_DOMAIN: domain to use for session cookies
+  - SESSION_COOKIE_HTTPONLY: whether to use HttpOnly flag on the session cookie. Default=True
+  - SESSION_COOKIE_NAME: name of the cookie to use for sessions
+  - SESSION_COOKIE_PATH: path set on session cookie
+  - SESSION_COOKIE_SAMESITE: value of SameSite flag on session cookie, this flag prevents cookie from being sent in cross-site requests
+  - SESSION_COOKIE_SECURE: whether to use a secure cookie for the session cookie
+  - SESSION_ENGINE: controls where Django stores session data 
+  - SESSION_EXPIRE_AT_BROWSER_CLOSE: whether to expire the session when the user closes their browser. Default:false
+  - SESSION_FILE_PATH: while using file-based session storage, this sets the directory in which Django will store session data
+  - SESSION_SERIALIZER: full import path of the serializer class to use for serializing session data.
