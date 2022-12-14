@@ -798,3 +798,30 @@ To handle timezone in python we use model pytz
               `{% if perms.appname.action_modelname %} 
               // code here 
                 {% endif %}`
+
+---
+
+## 13 December 2022
+
+###### 1. Today, I learned about cookies in django
+
+- ***cookies***: is a small piece of text data set by web server that resided on the client's machine
+- ***set_cookie()***: is used to **set/create/sent cookies**
+  syntax : `HttpResponse.set_cookie(key, value='', max_age=None,expires=None,path='/', domain=None, secure=False, httponly=False, samesite=None)`
+  - key: name of the cookie
+  - value=value of the cookie (this value is stored on the clients computer)
+
+- ***HttpRequest.COOKIES***:directory containing all cookies, Keys, and values are strings.
+  syntax: `request.COOKIES['key'];`
+  `request.COOKIES.get('key', default)`
+- ***delete_cookie()***: used to delete the cookie based on given key with same domain and path if they were set
+  syntax: `HttpResponse.delete_cookie(key,<other attribute if set>)`
+
+- Creating Signed Cookies
+  - ***set_signed_cookie()***:
+    syntax: `HttpResponse.set_signed_cookie(key, value,salt='', max_age=None,expires=None,path='/', domain=None, secure=False, httponly=False, samesite=None)`
+
+- Getting Signed Cookies
+  - ***get_signed_cookie()***:
+    syntax: `HttpResponse.get_signed_cookie(key,default=RAISE_ERROR,salt='',max_age=None)`
+
