@@ -882,3 +882,68 @@ To handle timezone in python we use model pytz
   - SESSION_EXPIRE_AT_BROWSER_CLOSE: whether to expire the session when the user closes their browser. Default:false
   - SESSION_FILE_PATH: while using file-based session storage, this sets the directory in which Django will store session data
   - SESSION_SERIALIZER: full import path of the serializer class to use for serializing session data.
+
+---
+
+## 16 December 2022
+
+###### 1. Today, i learned about QuerySet API Methods that return QuerySets
+
+- QuerySet is a list containing all those objects we have created using Django model
+
+- QuerySet allow us to read the data from the database, filter it and order it
+
+- query property: this is used to get sql query of query set
+  syntax: `queryset.query`
+  
+- **Methods that returns new QuerySets**
+  
+  - Retrieving all objects 
+    ***all()***: returns a copy of current QuerySet.
+    
+  - Retrieving specific objects
+    - ***filter(\*\*kwargs)***: returns a new QuerySet conatining objects that match the given 'lookup parameters'
+    
+    - ***exclude(\*\*kwargs)***: returns a new QuerySet object that do not match the given 'lookup parameters'
+    
+    - ***order_by(\*fields)***: orders the field ('field':Asc Order, '-field':Desc Order, '?':Randomly)
+    
+    - ***reverse()***: this works only when there is ordering in queryset
+    
+    - ***values(\*fields,\*\*expressions)***: returns a QuerySet that returns dictonaries, rather than model instances, when used as an iterable. 
+    
+    - ***values_list(\*fields,flat=False,named=False)***: similar to values() except that instead of returning dictonaries, it returns tuples when iterated over
+    
+    - ***using(alias)***: used for controlling which database the queryset will be evaluated against if you are using more than one database. this takes only argument which is alias of database, as defined in DATABASES
+    
+    - ***dates(field,kind,order='ASC')***: returns a QuerySet that evaluates to a list of datetime.time objects representing all available dates of a paerticular kind within the contents of the QuerySet
+      kind: year , month , week or day
+    
+    - ***datetimes(field_name,kind, order='ASC', tzinfo=None)***: returns a QuerySet that evaluates to a list of datetime objects representing all available dates of a particular kind within the contents of the QuerySet.
+    
+    - ***none()***: calling none will create a QuerySet that never returns any objects and no query will be executed when accessing the results.
+    
+    - ***union(\*other_qs,all=False)***: uses SQL's UNION operator to combine the results of two or more QuerySets.
+    
+    - ***intersection(\*other_qs)***: uses SQL's INTERSECT operator to return the shared elements of two or more QuerySets.
+    
+    - ***difference(\*other_qs)***: uses SQL's EXCEPT operator to keep only elements present in the QuerySets but not in some other QuerySets
+    
+    - Other Methods
+      ***select_related(\*fields)***    
+    
+      ***defer(\*fields)***    
+    
+      ***only(\*fields)***  
+    
+      ***prefetch_related(\*lookups)***    
+    
+      ***extra(select =None, where=None,params=None,tables=None,order_by=None,select_params=None)***    
+    
+      ***select_for_update(nowait=False,skip_locked=False,of=())***    
+    
+      ***annonate(\*args,\*\*kwargs)***    
+
+- **Operators that return new QuerySets**
+  - AND(&): combines two QuerySets using the SQL AND operator
+  - OR(|): combines two QuerySets using SQL OR operator
