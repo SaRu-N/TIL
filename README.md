@@ -947,3 +947,111 @@ To handle timezone in python we use model pytz
 - **Operators that return new QuerySets**
   - AND(&): combines two QuerySets using the SQL AND operator
   - OR(|): combines two QuerySets using SQL OR operator
+
+---
+
+## 19 December 2022
+
+###### Today, i learned about 
+
+###### 1. QuerySet API Methods that do not return QuerySets
+
+- Retrieving a single object 
+  ***get()***: returns one single object.
+
+  ***first()***: returns first object matched by the queryset
+
+  ***last()***: returns last object matched by the queryset
+
+  ***latest(\*fields)***: returns latest object in the table based on the given field(s).
+
+  ***earliest(\*fields)***: returns earliest object in the table based on the given field(s).
+
+  ***exists()***:returns True if the QuerySet contains any results, and False if not.
+
+- CRUD
+  ***create(\*\*kwargs)***: convenience method for creating an object and saving it all in one step.
+
+  ***get_or_create(defaults=None,\*\*kwargs)***: convenience method for looking up an object with the given kwargs, creating one if necessary.
+
+  ***update(\*\*kwargs)***: performs an SQL update query for the specified fields, and returns the number of rows matched.
+
+  ***update_or_create(defaults=None,\*\*kwargs)***: convenience method for updating an object with the given kwargs, creating a new one if necessary.
+
+  ***bulk_create(objs,batch_size=None,ignore_confilcts=False)***: this method inserts the provided list of objects into the database in an efficient manner.
+
+  ***bulk_update(objs,fields,batch_size=None)***: this method efficiently updates the given fields on the provided model instances, generally with one query.
+
+  ***in_bulk(id_list=None, field_name='pk')***: takes a list of field values (id_list) and the field_name for those values, and returns a dictionary mapping each value to an instance of the object with the given field value.
+
+  ***delete()***: this immediately deletes the object and returns the number of objects deleted and dictionary with the number of deletions per object type
+
+  ***count()***: returns an integer representing the number of objects in the database matching the QuerySet.
+
+  ***explain(format=None,\*\*options)***:returns a string of the QuerySet's execution plan, which details how the database would execute the query, including any indexes or joins that would be used.
+
+  ***aggregate(\*args,\*\*kwargs)***
+
+  ***as_manager()***
+
+  ***iterator(chunk_size=2000)***
+
+###### 2. QuerySet API Field Lookups in Django
+
+- **Field Lookups** are how we specify the meet of an SQL WHERE clause.
+
+  syntax: `field__lookuptype=value`
+
+  - ***exact***: Exact match.
+  - ***iexact***: Exact match but case insensitive.
+  - ***contains***: Case sensitive containment test.
+  - ***icontains***: Case insensitive containment test.
+  - ***in***: In a given iterable; often a list, tuple, or queryset. 
+  - ***gt***:Greater than
+  - ***gte***:Greater than or equal to
+  - ***lt***:Less than
+  - ***lte***:Less than or equal to
+  - ***startswith***:Case sensitive starts_with
+  - ***istartswith***:Case insensitive starts_with
+  - ***endswith***:Case sensitive ends_with
+  - ***iendswith***:Case insensitive ends_with
+  - ***range***:Range test (inclusive)
+  - ***date***: for datetime fields, casts the value as date, ***year***,***month***,***day***,***week***,***week_day***,***quarter***,***time***,***hour***,***minute***,***second***
+  - ***isnull***:
+  - ***regex*** and ***iregex***
+
+###### 3. QuerySet API Aggregation
+
+- ***aggregate()***: is a terminal clause for a QuerySet that, when invoked, returns a dictionary of name-value pairs.
+
+  syntax: `aggregate(name=agg_function('field'),  name=agg_function('field'),)`
+
+- Django Provides the following aggregation functions in the `django.db.models` module
+
+  - ***Avg(expression,output_field=None,distinct=False,filter=None,\*\*extra)***: returns the mean value of given expression which must be numeric unless you specify a different output_field.
+
+    Default alias: `<field>__avg`
+
+  - ***Count(expression,distinct=False,filter=None,\*\*extra)***: returns the number of objects that are related through the provided expression
+
+    Default alias: `<field>__count`
+
+  - ***Max(expression,output_field=None,filter=None,\*\*extra)***:returns the maximum value of given expression.
+
+    Default alias: `<field>__max`
+
+  - ***Min(expression,output_field=None,filter=None,\*\*extra)***:returns the minimum value of given expression.
+
+    Default alias: `<field>__min`
+
+  - ***Sum(expression,output_field=None,distinct=False,filter=None,\*\*extra)***:computes the sum of all values of given expression.
+
+    Default alias: `<field>__sum`
+
+  - ***StdDev(expression,output_field=None,sample=False,filter=None,\*\*extra)***:returns the standard deviation of the data in the provided  expression.
+
+    Default alias: `<field>__stddev`
+
+  - ***Variance(expression,output_field=None,sample=False,filter=None,\*\*extra)***:returns the variance of the data in the provided  expression.
+
+    Default alias: `<field>__variance`
