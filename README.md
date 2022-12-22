@@ -1055,3 +1055,99 @@ To handle timezone in python we use model pytz
   - ***Variance(expression,output_field=None,sample=False,filter=None,\*\*extra)***:returns the variance of the data in the provided  expression.
 
     Default alias: `<field>__variance`
+
+---
+
+## 20 December 2022
+
+###### Today I learned about
+
+###### 1. Q Objects
+
+- Q Object is an object used to encapsulate a collection of keyword arguments. we can use Q Objects to execute more complex queries
+
+- Q Objects can be combined using & and | operators. When an operator is used on two Q objects, it yields a new Q object.
+
+- Using Q Objects
+
+  `from django.db.models import Q`
+
+  - & Operator
+  - | Operator
+  - ~ Operator
+
+###### 2. Limiting QuerySets
+
+- use a subset of Python's array-slicing syntax to limit our QuerySet to a certain number of results.
+
+  Model.objects.all()[:5]- returns First 5 objects
+
+  Model.objects.all()[5:10]- returns sixth through tenth objects
+
+  Model.objects.all()[-1]- this is not valid
+
+  Model.objects.all()[:10:2]- returns a list of every second object of the first 10.
+
+###### 3. Cache and per site Cache in Django
+
+- Cache is an information technology for the temporary storage of web documents, such as Web Pages, images, and other types of Web multimedia to reduce server tag
+
+- Caching is one of the methods which a website implements to become faster
+
+- Options of caching:
+  - Database Caching
+  - File System Caching
+  - Local Memory Caching
+
+-  Implement Caching
+  - ***the per-site cache***: Once the cache is set up, the simplest way to use caching is to cache your entire site.
+  - ***the per-view cache***: more granular way to use the caching framework is by caching the output of individual views.
+  - ***Template fragment Caching***: gives us more control what to cache
+
+- **Per Site Cache**:
+
+  `MIDDLEWARE=[` // must maintain this order
+
+  `'django.middleware.cache.UpdateCacheMiddleware',`
+
+  `'django.middleware.Common.CommonMiddleware',`
+
+  `'django.middleware.cache.FetchFromCacheMiddleware',`
+
+  `]`
+
+  Variables:
+
+  - CACHE_MIDDLEWARE_ALIAS: cache alias to use for storage
+  - CACHE_MIDDLEWARE_SECONDS: number of seconds each page should be  cached
+  - CACHE_MIDDLEWARE_KEY_PREFIX: if cache is shared across multiple sites using the same Django installation, set this to the name of the site, or some other string that is unique to this Django instance, to prevent key collisions
+
+- **Database Caching**
+
+  Django can store its cached data in our database
+
+  `CATCHES-{'default':{ `
+
+  ​      `'BACKEND':'django.core.cache.backends.db.DatabaseCache',`
+
+  ​      ` 'LOCATION':'my_cache_table', `
+
+  `}}`
+
+  Before using the database cache, we must create the cache table with this command:
+
+  `python manage.py createcachetable`
+
+- **Cache Arguments**: each cache backend can be given additional arguments to control caching behavior
+  - ***TIMEOUT***: defalut timeout, in seconds, to use for the cache
+  
+  - ***OPTIONS***: options that should be passed to the cache backend.
+  
+    cache backends that implement their own cullling strategy will honor the following options:
+  
+    - MAX_ENTRIES: maximum no. of entries allowed in the cache before old values are deleted.
+    - CULL_FREQUENCY: the fraction of entries that are culled when MAX_ENTRIES is reached.
+  
+    
+  
+    
