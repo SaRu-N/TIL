@@ -1147,7 +1147,98 @@ To handle timezone in python we use model pytz
   
     - MAX_ENTRIES: maximum no. of entries allowed in the cache before old values are deleted.
     - CULL_FREQUENCY: the fraction of entries that are culled when MAX_ENTRIES is reached.
-  
-    
-  
-    
+
+---
+
+## 22 December 2022
+
+###### 1. Today i learned
+
+###### per site Cache in Django
+
+- **Filesystem caching**
+
+  - serializes and stores each cache value as a separate file.
+
+    `CATCHES-{'default':{ `
+
+     `'BACKEND':'django.core.cache.backends.filebased.FileBasedCache',`
+
+    ​      ` 'LOCATION':'path_of_cache_file', `
+
+    `}}` 
+
+- **Local memory Caching**
+
+  - this is default cache if another is not specified in your settings file. this cache is per-process and thread-safe.
+
+  - `CATCHES-{'default':{ `
+
+     `'BACKEND':'django.core.cache.backends.locmem.LocMemCache',`
+
+    ​      ` 'LOCATION':'unique-snowflake', `
+
+    `}}` 
+
+###### 2. per view Cache in Django
+
+- a more granular way to use caching framework is by caching the output of individual views.
+
+  > from django.views.decorators.cache import cache_page
+  >
+  > @cache_page(timeout,cache,key_prefix)
+  >
+  > def view(request):
+
+  specifying per-view cache in URLconf
+
+  > from django.views.decorators.cache import cache_page
+  >
+  > urlpatterns=[
+  >
+  > ​	path('route/',cache_page(timeout,cache,key_prefix)(view_function)),
+  >
+  > ]
+
+###### 3. Template Fragment Cache in Django
+
+- This gives more control what to cache
+
+  {% load cache %}  this gives access to cache tag in template
+
+  {% cache %} this tag caches the contents of the block for a given amount of time.
+
+  Syntax: `{% cache timeout name variable using=""%}........{% endcache name %}`
+
+---
+
+## 23 December 2022
+
+###### Today i learned
+
+###### 1. Model manager in Django
+
+- A manager is interface through which database query operations are provided to Django models.
+- to rename a manager for a given class, define a class attribute of type models.Manager() on that model. by default it is objects
+- **Custom Model Manager**
+  - can use custom manager in a particular model by extending base Manager and inserting custom Manager in our model.
+
+- **Modify the initial QuerySet**
+
+  - can override the Manager's base queryset by overriding the Manager.get_queryset() method get_queryset() should return the new QuerySet of our choice
+
+    > class CustomManager(models.Manager):
+    >
+    > ​	def get_queryset(self):
+    >
+    > ​		return super().get_queryset().order_by('name')
+
+- **Add extra Manager methods**
+  - adding extra Manager methods is the preferred way to add 'table-level' functionality to the models
+
+>  class CustomManager(models.Manager):
+>
+> ​	def  custom_methodname(self):
+>
+> ​				//desired code
+
