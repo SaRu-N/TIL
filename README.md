@@ -1242,3 +1242,31 @@ To handle timezone in python we use model pytz
 >
 > ​				//desired code
 
+---
+
+## 26 Deceber 2022
+
+###### Today I learned about model relationship in django
+
+- Model Relationship
+  1. One to One Relationship
+  2. One to Many Relationship
+  3. Many to Many Relationship
+
+****
+
+- **One to One Relationship**
+
+  - to define, use **OneToOneField**
+    syntax:  `OneToOneField(to,on_delete,parent_link=False, **options)`
+
+  - **on_delete**: when an object referred by a ForiegnKey is deleted, Django will emulate the behaviour of the SQL constraint specified by the on_delete argument.
+
+    - CASCADE: Cascade deletes.  Django emulates the behaviour of  SQL constraint ON DELETE CASCADE also deleted the object containig the ForiegnKey.
+    - PROTECT: Prevent deletion of the referenced object by raising ProtectectError, a subclass of django.db.IntegrityError
+    - SET_NULL
+    - SET_DEFAULT
+    - SET()
+    - DO_NOTHING
+
+    
