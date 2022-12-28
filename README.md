@@ -1244,7 +1244,7 @@ To handle timezone in python we use model pytz
 
 ---
 
-## 26 Deceber 2022
+## 26 December 2022
 
 ###### Today I learned about model relationship in django
 
@@ -1270,3 +1270,25 @@ To handle timezone in python we use model pytz
     - DO_NOTHING
 
     
+
+---
+
+## 27 December 2022
+
+###### Today, I learned about Many to One Relationship
+
+- **Many to One Relationship**
+
+  - When One or more row of table B can be linked to one row of a table A.
+
+  - to define, use **ForiegnKey**
+    syntax:  `ForiegnKey(to,on_delete,**options)`
+
+    
+
+- **Many to Many Relationship**
+
+  - When One row of table A can be linked to one or more rows of  table B, and vice-versa.
+
+  - to define, use **ManyToManyField**
+    syntax:  `ManyToManyField(to,**options)`
