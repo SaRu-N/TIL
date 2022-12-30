@@ -823,7 +823,7 @@ To handle timezone in python we use model pytz
 
 - Getting Signed Cookies
   - ***get_signed_cookie()***:
-    syntax: `HttpResponse.get_signed_cookie(key,default=RAISE_ERROR,salt='',max_age=None)`
+    syntax: `HttpResponse.get_signed_cookie    ell with some borders just like the following screenshot.(key,default=RAISE_ERROR,salt='',max_age=None)`
 
 ---
 
@@ -1292,3 +1292,40 @@ To handle timezone in python we use model pytz
 
   - to define, use **ManyToManyField**
     syntax:  `ManyToManyField(to,**options)`
+
+---
+
+## 29 December 2022
+
+###### Today, I learned about 
+
+###### 1.  Class Based Base View in Django
+
+- Class based views provide an alternative way to implement views as Python objects instead of functions
+- Types of class based views:
+  - **Base Class-Based Views/Base View**
+  - **Generic Class-Based Views/Generic View**
+
+###### 2. Base Class-Based Views/ Base View
+
+- can be thought of as parent views, which can be used by themselves or inherited from
+- Available Classes:
+  - View
+  - Template View
+  - Redirect View
+
+- **View**
+
+  - `django.views.generate.base.View`
+  - The master class-based base view. all other class-based views inherit from this base class.
+  - Attributes:
+    - http methods name ['get', 'post', 'patch', 'delete', 'head', 'options', 'trace']
+      the list of HTTP method names that this view will accept.
+
+  - Methods:
+    - `setup(self,request,*args,**kwargs)`: initializes view instance attributes: self.request, self.args, and self.kwargs prior to dispatch()
+    - `dispatch(self,request,*args,**kwargs)`: the view part of the view - the method that accepts a request argument plus arguments, and returns a HTTP response.
+    - `http_method_not_allowed(self, request, *args, **kwargs)`: If the view was called with a HTTP method it doesn't support, this method is called instead.
+    - `options(self,request,*args,**kwargs)`: handles responding to requests for the OPTIONS HTTP verb.
+    - `as_view(cls,**initkwargs)`: returns a callable view that takes a request and returns a response
+    - `_allowed_methods(self)`
