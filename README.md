@@ -1329,3 +1329,38 @@ To handle timezone in python we use model pytz
     - `options(self,request,*args,**kwargs)`: handles responding to requests for the OPTIONS HTTP verb.
     - `as_view(cls,**initkwargs)`: returns a callable view that takes a request and returns a response
     - `_allowed_methods(self)`
+
+---
+
+## 30 December 2022
+
+###### Today I Learned
+
+###### 1. Template View 
+
+- `django.views.generic.base.TemplateView` 
+- renders a given template, with the context containing parameters captured in the URL.
+
+---
+
+## 4 January 2023
+
+###### Today, i learned about
+
+###### 1.  Redirect View
+
+- `django.views.generic.base.RedirectView` 
+
+###### 2. Generic Class Based View
+
+- are buit off of those base views, and were developed as a shortcut for common usage patterns such as displaying the details of an object.
+- **Display View**: ListView, DetailView
+- **Editing View**: FormView, CreateView, UpdateView, DeleteView
+- **Date View**: ArchiveIndexView, YearArchiveView, MonthArchiveView, WeekArchiveView, DayArchiveView, TodayArchiveView, DateDetailView
+
+###### 3. Generic Display View
+
+1. **List View**
+   - `django.views.generic.list.ListView`
+   - A Page representing a list of objects.
+   - 
