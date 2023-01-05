@@ -1363,4 +1363,58 @@ To handle timezone in python we use model pytz
 1. **List View**
    - `django.views.generic.list.ListView`
    - A Page representing a list of objects.
-   - 
+   - By Default it takes template name as modelname_list.html
+   - we can customize the view  by:
+     - `template_name_suffix`: by default it is _list
+     - `ordering`: by default it is id
+     - `template_name`=custom_template
+     - `get_template_names()`: returns a list of candidate template names
+     - `get_queryset()`:
+
+---
+
+## 5 January 2023
+
+###### Today i learned,
+
+###### 1. Detail View in Generic Display View
+
+- `django.views.generic.detail.DetailView`
+- While this view is executing, self.object will contain the object that the view is operating upon.
+- While defining an url pattern, an object pk or a slug must be used 
+- Custom Detail View Templates:
+  - `template_name`=custom_template
+  - `context_object_name`=anyname:  by default model_name with first small letter 
+  - `pk_url_kwarg`='anyname': this name is written while defigning url pattern.
+
+###### 2. Generic Editing View: FormView
+
+- **FormView**
+  - `django.views.generic.edit.FormView`
+  - A View that displays a form. On error, redisplays the form with validation errors; on success, redirects to a new URL.
+
+- **CreateView**
+  - `django.views.generic.edit.CreateView`
+  - A view that displays a form for creating an object, redisplaying the form with validation errors(if any) and saving the object.
+
+- **UpdateView**
+  - `django.views.generic.edit.UpdateView`
+  - A view that displays a form for editing an existing object, redisplaying the form with validation errors (if any) and saving changes to the object. This uses a form automatically generated from the object's model class(unless a form class is manually specified) 
+
+- **DeleteView**
+  - `django.views.generic.edit.DeleteView`
+  - A view that displays a confirmation page and deletes an existing object. The given object will only be deleted if the request method is POST. If this view is fetched via GET, it will display a confirmation page that should contain a form that POSTs to the same URL.
+
+###### 3. Authentication Views with Function Based View
+
+- Django provides several views that we can use for handling login, logout and password management.
+
+- these make use of the stock auth forms but we can pass in our forms as well
+
+- to use in urls.py : 
+
+  `path('accounts/',include(django.contrib.auth.urls'))`
+
+- to change redirection after login
+
+  `LOGIN_REDIRECT_URL ='path'` in settings.py
