@@ -1418,3 +1418,282 @@ To handle timezone in python we use model pytz
 - to change redirection after login
 
   `LOGIN_REDIRECT_URL ='path'` in settings.py
+
+---
+
+## 8 January 2023
+
+###### Today, i learned
+
+###### 1. Function Based View with login_required and staff_member_required Decorators in Django
+
+1. **login_required Decorator**
+
+- syntax: `login_required(redirect_field_name='next',login_url=None)`
+- If the user is logged in, execute the view normally. The view code is free to assume the user is logged in.
+- If the user isn't logged in, redirect to settings.LOGIN_URL, passing the current absolute path in the query string.
+- to use: `django.contrib.auth.decorators.login_required` and  use `@login_required`
+
+2. **staff_member_required Decorator**
+
+- syntax: `staff_member_required(redirect_field_name='next', login_url='admin:login')`
+- This is used on the admin views that require authorization. A view decorated with this function will have the following behavior:
+  - If the user is logged in, is a staff member(User.is_staff=True), and is active(User.is_active=True), execute the view normally
+  - Otherwise, the request will be redirected to the URL specified by the login_url parameter, with the originally requested path in a query string variable specified by redirect_field_name.
+
+- to use: `django.contrib.admin.views.decorators.staff_member_required` and  use `@staff_member_required`
+
+3. **permission_required Decorator**
+
+- syntax: `permission_required(perm, login_url=None, raise_exception=False)`
+- Used to check whether a user has a particular permission.
+- Just like the has_perm() method, permission names takes the form "<app label>.<permission codename>"
+- to use: `django.contrib.auth.decorators.permission_required` and  use `@permission_required('applabel.permission_name')`
+
+###### 
+
+###### 2. required decoration in Class-Based View
+
+1. method_decorator in django
+
+- The method_decorator transforms a function decorator into a method decorator so that it can be used on an instance method
+- A method on a class isn't quite the same as standalone function, so we can't just apply a function decorator to the method we need to transform into a method decorator first.
+- syntax: `@method_decorator(*args,**kwargs)`
+- `django.utils.decorators.method_decorator`
+
+2. **Decorating in urls.py or URLconf**
+
+- The simplest way of decorating class-based views is to decorate the result of the as_view() method.
+- The easiest place to do this is in the URLconf where we deployour view:
+  - import path,TemplateView, Custom TemplateView, decorators
+  - `path('/',login_required(TemplateView.as_view(template_name='template_path')),name='name')`
+  - `path('/',permission_required('app.permission_name')(TemplateView.as_view()), name='name')`
+
+3. **Decorating in the class**
+
+- To decorate every instance of a class-based view, we need to decorate the class definition itself. 
+
+- For this we apply decorator to the `dispatch() `method of class:
+
+  - import TemplateView,decorators
+
+  - > class AnyClassName(TemplateView):
+    >
+    > ​        template_name='template_path'
+    >
+    > ​        @method_decorator(decorator_name)
+    >
+    > ​         def dispatch(self,*args,**kwargs):
+    >
+    > ​                   return super().dispatch(*args,**kwargs)
+    >
+    > ​                                      OR
+    >
+    > @method_decorator(decorator_name,name='dispatch')
+    >
+    > class AnyClassName(TemplateView):
+    >
+    > ​        template_name='template_path'
+
+-  If there is a set of common decorators used, we can define a list or tuple of decorators and use that instead of invoking `method_decorator()` multiple times
+
+  - The decorators will process a request in the order they are passed to the decorator.
+
+  > decorators =[decorator_name1,decorator_name2,...]
+  >
+  > @method_decorator(decorators,name='dispatch')
+  >
+  > class AnyClassName(TemplateView):
+  >
+  > ​        template_name='template_path'
+
+###### 3. Custom Authentication View
+
+1. **LoginView**
+
+   - `django.contrib.auth.views.LoginView`
+
+   - Default Template: registration/login.html
+
+     This template gets passed four template context variables:
+
+     - **form:** Form object representing Authentication Form
+     - **next:** URL to redirect after successful login
+     - **site:** current Site according to the SITE_ID setting
+     - **site_name**: alias for site.name
+
+   - Custom Template:
+
+     `path('login/',views.LoginView.as_view(template_name='custom template'))`
+
+   - Attributes:
+
+     - **template_name:** name of template to display for view used to log the user in
+     - **redirect_field_name:**name of GET field containing the URL to redirect after login
+     - **authentication_form:**A callable to use for authentication
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+     - **redirect_authenticated_user:**boolean that controls whether or not authenticatedd users accessing the login page will be redirected as if they had just successfully logged in.
+     - **success_url_allowed_hosts:**A set of hosts, in addition to request.get_host, that are safe for redirecting after login.
+
+2. **LogoutView**
+
+   - `django.contrib.auth.views.LogoutView`
+
+   - Default Template: registration/logged_out.html
+
+     This template gets passed three template context variables:
+
+     - **title:**The string "Logged out", localized
+     - **site:** current Site according to the SITE_ID setting
+     - **site_name**: alias for site.name
+
+   - Custom Template:
+
+     `path('logout/',views.LogoutView.as_view(template_name='custom template'))`
+
+   - Attributes:
+
+     - **next_page:** the URL to redirect to after logout.
+     - **template_name:**full name of template to display after logging the user out.
+     - **redirect_field_name:**name of GET field containing the URL to redirect after log out
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+     - **redirect_authenticated_user:**boolean that controls whether or not authenticatedd users accessing the login page will be redirected as if they had just successfully logged in.
+     - **success_url_allowed_hosts:**A set of hosts, in addition to request.get_host, that are safe for redirecting after log out.
+
+3. **PasswordChangeView**
+
+   - `django.contrib.auth.views.PasswordChangeView`
+
+   - Default Template: registration/password_change_form.html
+
+     This template gets passed following template context variables:
+
+     - **form:** Form object representing Password change Form
+
+   - Custom Template:
+
+     `path('password_change/',views.PasswordChangeView.as_view(template_name='custom template'))`
+
+   - Attributes:
+     - **template_name:**full name of template to displaying the password change form
+     - **success_url:**URL to redirect to after a successfull password change
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+     - **form_class:**custom "change password" form which must accept a user keyword argument.
+
+4. **PasswordChangeDoneView**
+
+   - `django.contrib.auth.views.PasswordChangeDoneView`
+
+   - Default Template: registration/password_change_done.html
+
+   - Custom Template:
+
+     `path('password_change/done/',views.PasswordChangeDoneView.as_view(template_name='custom template'))`
+
+   - Attributes:
+     - **template_name:**full name of template to use
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+
+5. **PasswordResetView**
+
+   - `django.contrib.auth.views.PasswordResetView`
+
+   - Default Template: registration/password_reset_form.html
+
+     This template gets passed following template context variables:
+
+     - **form:** Form for resetting the user's password
+
+     This Email template gets passed following email template context variables:
+
+     - **email:**An alias for user.email
+     - **user:**current user, according to the email form field
+     - **site_name:**An alias for site.name
+     - **domain:**An alias for site.domain
+     - **protocol:**http or https
+     - **uid:**The user's primary key encoded in base 64
+     - **token:**Token to check that the reset link is valid
+
+   - Custom Template:
+
+     `path('password_reset/',views.PasswordResetView.as_view(template_name='custom template'))`
+
+   - Attributes:
+     - **template_name:**full name of template to displaying the password reset form
+     - **success_url:**URL to redirect to after a successfull password reset
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+     - **form_class:**Form that will be used to get the email of the user to reset the password for.
+     - **email_template_name**:full name of template to use for generating email with the reset password link
+     - **subject_template_name:**full name of template to use for the subject of the email with the reset password link.
+     - **token_generator:**Instance of class to check the one time link
+     - **from_email:**valid email address
+     - **html_email_template_name:**full name of the template to use for generating text/html multipart email with the password reset link
+     - **extra_email_context:**dictionary of context data that will be available in the email template.
+
+6. **PasswordResetDoneView**
+
+   - `django.contrib.auth.views.PasswordResetDoneView`
+
+   - Default Template: registration/password_reset_done.html
+
+   - Custom Template:
+
+     `path('password_reset/done/',views.PasswordResetDoneView.as_view(template_name='custom template'))`
+
+   - Attributes:
+     - **template_name:**full name of template to use
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+
+7. **PasswordResetConfirmView**
+
+   - `django.contrib.auth.views.PasswordResetConfirmView`
+
+   - Default Template: registration/password_reset_confirm.html
+
+     This template gets passed following template context variables:
+
+     - **form:** Form for setting the new user's password
+     - **validlink:**Boolen, True if the link(combination of uidb64 and token) is valid or unused yet
+
+   - Custom Template:
+
+     `path('reset/<uidb64>/<token>/',views.PasswordResetConfirmView.as_view(template_name='custom template'))`
+
+   - Attributes:
+     - **template_name:**full name of template to use
+     - **token_generator:**Instance of class to check the password
+     - **post_reset_login:**Boolean indicating if the user should be automatically authticated after successful password reset.
+     - **post_reset_login_backend:**Dotted path to the authentication backend to use when authenticating a user if post_reset_login is True
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+     - **form_class:**Form that will be used to set the password.
+     - **success_url:**URL to redirect after the password reset is done
+     - **reset_url_token:**Token parameter displayed as a component of password reset URLs.
+
+8. **PasswordResetCompleteView**
+
+   - `django.contrib.auth.views.PasswordResetCompleteView`
+
+   - Default Template: registration/password_reset_complete.html
+
+     This template gets passed following template context variables:
+
+     - **form:** Form for setting the new user's password
+     - **validlink:**Boolen, True if the link(combination of uidb64 and token) is valid or unused yet
+
+   - Custom Template:
+
+     `path('reset/done/',views.PasswordResetCompleteView.as_view(template_name='custom template'))`
+
+   - Attributes:
+     - **template_name:**full name of template to use
+     - **extra_context:**dictionary of context data that will be added to default context data passed to template
+
+###### 4. Built-in Forms in Django
+
+1. **AdminPasswordChangeForm**:used in admin interface to change user's password
+2. **AuthenticationForm**: for logging a user in
+3. **PasswordChangeForm**:for allowing a user to change their password
+4. **PasswordResetForm**: for generating and emailing a one-time use link to reset a user's password
+5. **SetPasswordForm**:lets user change password without old password
+6. **UserChangeForm**:used in admin interface to change a user's information and permissions
+7. **UserCreationForm**:ModelForm for creating a user
