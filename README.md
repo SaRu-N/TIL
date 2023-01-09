@@ -1697,3 +1697,231 @@ To handle timezone in python we use model pytz
 5. **SetPasswordForm**:lets user change password without old password
 6. **UserChangeForm**:used in admin interface to change a user's information and permissions
 7. **UserCreationForm**:ModelForm for creating a user
+
+---
+
+## 9 January 2023
+
+###### Today I learned
+
+###### 1. Authentication Setting in Django
+
+Settings for django.contrib.auth
+
+1. AUTHENTICATION_BACKENDS
+
+   List of authentication backend classes(as strings) to use when attempting to authenticate a user.
+
+   Default: `['django.contrib.auth.backends.ModelBackend']`
+
+2. AUTH_USER_MODEL
+
+   model to use to represent a User
+
+   Default: `'auth.User'`
+
+3. LOGIN_REDIRECT_URL
+
+   URL or named URL pattern where requests are redirected after login when the LoginView doesn't get a next GET parameter
+
+   Default:`'/accounts/profile/'`
+
+4. LOGIN_URL
+
+   URL or named URL pattern where requests are redirected for login when using the login_required() decorator, LoginRequiredMixin, or AccessMixin 
+
+   Default:`'/accounts/login/'`
+
+5. LOGOUT_REDIRECT_URL
+
+   URL or named URL pattern where requests are redirected after logout when the LogoutView doesn't have a next_page attribute.
+
+   Default:`None`
+
+6. PASSWORD_RESET_TIMEOUT_DAYS
+
+   minimum number of days password reset link is valid for
+
+   used by the PasswordResetConfirmView.
+
+   Default: 3
+
+7. PASSWORD_HASHERS
+
+   Default: 
+
+   > [
+   >
+   > ​	'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+   >
+   > ​	'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+   >
+   > ​	'django.contrib.auth.hashers.Argon2PasswordHasher',
+   >
+   > ​	'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+   >
+   > ]
+
+8. AUTH_PASSWORD_VALIDATORS
+
+   list of validators that are used to check the strength of user's passwords.
+
+   Default: [] (Empty List)
+
+###### 2. Database Configuration in Django
+
+1. SQLite3
+
+   Thiis is default database used by django.
+
+2. MySQL
+
+   - Install mysql in system
+
+   - create a database and user to config MySQL with Django
+
+   - Open  settings.py
+
+     > DATABASE={
+     >
+     > ​	'default':{
+     >
+     > ​		'ENGINE':'django.db.backends.mysql',
+     >
+     > ​		'NAME':'database_name',
+     >
+     > ​		'USER':'user_name',
+     >
+     > ​		'PASSWORD':'password',
+     >
+     > ​		'HOST':'localhost',
+     >
+     > ​		'PORT':port number,
+     >
+     > }
+     >
+     > }
+
+3. Oracle SQL
+
+   - Install Oracle in system
+
+   - create a database and user to config Oracle with Django
+
+   - Open  settings.py
+
+     > DATABASE={
+     >
+     > ​	'default':{
+     >
+     > ​		'ENGINE':'django.db.backends.oracle',
+     >
+     > ​		'NAME':'database_name',
+     >
+     > ​		'USER':'user_name',
+     >
+     > ​		'PASSWORD':'password',
+     >
+     > ​		'HOST':'localhost',
+     >
+     > ​		'PORT':port number,
+     >
+     > }
+     >
+     > }
+
+4. Postgres
+
+   - Install Postgres in system
+
+   - create a database and user to config Postgres with Django
+
+   - Open  settings.py
+
+     > DATABASE={
+     >
+     > ​	'default':{
+     >
+     > ​		'ENGINE':'django.db.backends.postgres',
+     >
+     > ​		'NAME':'database_name',
+     >
+     > ​		'USER':'user_name',
+     >
+     > ​		'PASSWORD':'password',
+     >
+     > ​		'HOST':'localhost',
+     >
+     > ​		'PORT':port number,
+     >
+     > }
+     >
+     > }
+
+###### 3. Pagination in Django
+
+Using pagination we can split data to several pages, with Previous/Next links
+
+Django Provides a few classes that help us manage paginated data:
+
+1.  Paginator Class
+2. Page Class
+
+**Paginator Class**
+
+> class Paginator(object_list,per_page,orphans=0,allow_empty_first_page=True)
+
+where,
+
+object_list: takes tuple, list, QuerySet or other sliceable object with a `count()` or `__len__()` method. Required
+
+per_page: maximum number of items to include on a page, not including orphans. Required
+
+orphans: Used when we don't want to have a last page with very few items. Optional
+
+allow_empty_first_page: Whether or not the first page is allowed to be empty. Optional
+
+***Attributes***
+
+- count: total number of objects, across all pages.
+- num_pages: total number of pages
+- page_range: A 1-based range indicator of page numbers
+
+***Methods***
+
+- get_page(number): returns a Page object with given 1-based view, while also handling out of range and invalid page numbers.
+- page(number): returns a Page object with the given 1-based index.
+
+**Page Class**
+
+> class Page(object_list,number,paginator)
+
+A page acts like a sequence of Page.object_list when uding len() or iterating it directly.
+
+***Attributes***
+
+- object_list: list of object on this page
+
+- number: the 1-based page number for this page.
+- paginator: the associated Paginator object
+
+***Methods***
+
+- has_next(): returns True if there's a next page
+- has_previous(): returns True if there's previous page
+- has_other_pages(): returns True if there's a next or previous page
+- next_page_number(): returns the next page number.
+- previous_page_number(): returns the previous page number.
+- start_index(): returns 1-based index of the first object on the page, relative to all of the objects in the paginator's list.
+- end_index(): returns 1-based index of the llast object on the page, relative to all of the objects in the paginator's list.
+
+###### 4. Django Security
+
+1. Cross Site Scripting (XSS) Protection
+2. Cross Site Request Forgery (CSRF) Protection
+3. SQL Injection Protection
+4. ClickJacking Protection
+5. Host header validation
+6. Referrer Policy
+7. Session Security
+8. User- Uploaded Content
