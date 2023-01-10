@@ -1925,3 +1925,79 @@ A page acts like a sequence of Page.object_list when uding len() or iterating it
 6. Referrer Policy
 7. Session Security
 8. User- Uploaded Content
+
+---
+
+## 10 January 2023
+
+#### Django REST Framework
+
+###### Today I learned 
+
+###### 1. API and Web API
+
+1. **API**
+
+   - Application Programming Interface
+   - is a software intermediary that allows two or more applications to interact with each other
+   - Types in terms of Release Policies
+     - Private: can be used within the organization
+     - Partner: can be used within Business Partners
+     - Public: can be used by any third party Developers
+
+2. **Web API**
+
+   - An API , which is interface for web 
+   - may consist of one or more endpoints to define request and response
+   - **How Web API Works**
+     - Client makes HTTP Requests to API
+     - API will communicate to web Application/ Database(if needed)
+     - Web Application/ Database provides required data to API
+     - API returns Data to Client (may be Json Data, XML Data)
+
+   - **How to use API**
+     - Register/ Sign-up to API
+     - API may provide API Key for Authentication purpose
+     - Whenever we need to communicate with server make Request to API with API Key
+     - If API Key authentication succeed, API will provide required Data
+
+###### 2. REST and REST API
+
+1. REST : is an guideline to develop Web API
+2. REST API
+   - API which is develped using REST is REST API/ RESTful API
+   - CRUD Operations
+     - Create : POST
+     - Read: GET
+     - Update: PUT(complete update), PATCH(partial update)
+     - Delete: DELETE
+
+###### 3. Django REST Framework , Serializer 
+
+- Django REST Framework (DRF) is a framework built upon the django framework and it's used for developing RESTful API
+- Serializers are responsible for converting objects into data types understandable by javascript and front-end frameworks
+- Serializers are also responsible for deserialization which means it allows parsed data to be converted back into complex types, after first validating the incoming data.
+- **Serializer Class**
+  - similar to Django Form and ModelForm class, and includes similar validation flags on the various fields, such as required, max_length and deafult
+
+- Serialization: process of converting complex data such as querysets and model instances to native Python datatypes 
+
+- **JSONRenderer**
+
+  used to render Serialized data into JSON which is understandable by Front End.
+
+  > from rest_framework.renderers import JSONRenderer
+  >
+  > json_data = JSONRenderer().render(serializer.data)
+
+- JSONResponse
+
+  HttpResponse subclass that helps to create a JSON-encoded response. It inherits most behavior from its superclass with a couple differences:
+
+  - Default Content-Type header is set to application/json.
+  - first parameter, data, should be dict instance
+  - The encoder, which defaults to django.core.serializers.json.DjangoJSONEncoder, will be used to serialize the data.
+  - The safe boolean parameter defaults to True
+  - The json_dumps_params parameter is a dictionary of keyword arguments to pass to the json.dumps() call used to generate the response
+
+  >JsonResponse(data,encoder=DjangoJSONEncoder, safe=True, json_dumps_params=None, **kwargs)
