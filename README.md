@@ -1990,7 +1990,7 @@ A page acts like a sequence of Page.object_list when uding len() or iterating it
   >
   > json_data = JSONRenderer().render(serializer.data)
 
-- JSONResponse
+- **JSONResponse**
 
   HttpResponse subclass that helps to create a JSON-encoded response. It inherits most behavior from its superclass with a couple differences:
 
@@ -2001,3 +2001,77 @@ A page acts like a sequence of Page.object_list when uding len() or iterating it
   - The json_dumps_params parameter is a dictionary of keyword arguments to pass to the json.dumps() call used to generate the response
 
   >JsonResponse(data,encoder=DjangoJSONEncoder, safe=True, json_dumps_params=None, **kwargs)
+
+---
+
+## 11 January 2023
+
+###### Today i learned
+
+###### 1.  Serializer Fields and arguments, De-serialization
+
+- Serializer fields handle converting between primitive values and internal datatypes.
+
+- syntax
+
+  > from rest_framework import serializers
+  >
+  > serializers.Field_Name()
+
+- Serializer Fields:
+  - CharField, IntegerField, DecimalField, SlugField, EmailField, BooleanField, URLField, FileField, ImageField, DateField,TimeField, RegexField, SerializerMethodField, ModelField
+
+- Core Arguments:
+  - label, validators, error_messages, help_text, requires, default, initial, style, read_only,  write_only, allow_null, source
+
+**De-Serialization**
+
+- ByetsIO()
+
+  - A stream implementation using an in-memory bytes buffer. The buffer is discarded when the close() method is called.
+
+    > import io
+    >
+    > stream = io.BytesIO(json_data)
+
+- JSONParser()
+
+  - used to parse json data to python native data type.
+
+    > from rest_framework.parsers import JSONParser
+    >
+    > parsed_data= JSONParser().parse(stream)
+
+- De-seralization
+
+  - Deserialization allows parsed data to be converted back into complex types after first validating the incoming data.
+
+    >serializer =SerializerName(data=parsed_data)
+    >
+    >serializer.is_valid()
+    >
+    >print(serializer.validated_data)
+    >
+    >print(serializer.errors)
+
+  - For CRUD operations
+
+    > from rest_framework import serializers
+    >
+    > class SerializerName(serialisers.Serializer):
+    >
+    > ​           //fields here
+    >
+    > ​           def create(self, validated_data):
+    >
+    > ​                     return Modelname.objects.create(**validated_data)
+    >
+    > ​            def update(self,instance,validated_data):
+    >
+    > ​                      instance.fieldname =validated_data.get('fieldname', instance.fieldname)
+    >
+    > ​                       instance.save() 
+    >
+    > ​                       return instance 
+
+  
