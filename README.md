@@ -2074,4 +2074,252 @@ A page acts like a sequence of Page.object_list when uding len() or iterating it
     >
     > ​                       return instance 
 
+  ---
   
+  ## 13 January 2023
+  
+  ###### Today i learned
+  
+  ###### 1.  Validation in serializer 
+  
+  1. Field Level Validation
+  
+     - we can specify field-level validation by adding `validate_fieldName` methods in our serializer subclass
+  
+     - `validate_fieldName` methods should return the validated value or raise a serializers.ValidationError
+  
+     - syntax:  here value is the field value that requires validation
+  
+       > def validate_fieldname(self,value):
+       >
+       > ​          //validation code
+  
+  2. Object Level Validation
+  
+     - When we need to do validation that requires access to multiple fields we do object level validation by adding a method called `validate()` to serializer subclass
+  
+     - syntax: here data is a dictionary of field values
+  
+       > def validate(self,data):
+       >
+       > ​         //validation code
+  
+  3. Validators
+  
+     - Validators are used when we want to place our validation logic into resusable components, so that it can easily be reused throughout our codebase.
+  
+     - syntax: must include the custom_function in field of serializer subclass
+  
+       > def custom_function(value):
+       >
+       > ​           //validation code
+       >
+       > class SerializerClass(serializers.Serializer):
+       >
+       > ​          field_name=serializers.FieldName(other_attributes, validators=[custom_function]) 
+
+---
+
+## 16 January 2023
+
+###### Today i learned
+
+###### 1. ModelSerializer Class
+
+- ModelSerializer class provides a shortcut that lets us automatically create a Serializer class with fields that correspond to the Model fields
+- ModelSerializer is same as regular Serializer, except that:
+  - it will automatically generate a set of fields for us, based on the model
+  - it will automatically generate validators for the serializer, such as unique_together validators
+  - it includes simple default implementations of create() and update()
+
+​	**Create ModelSerializer Class**
+
+> from rest_framework import serializers
+>
+> class SerializerName(serializers.ModelSerializer):
+>
+> ​               class Meta:
+>
+> ​                          model=model_name
+>
+> ​                          fields=[required fields]
+>
+> ​                          // `fields='__all__'` or can exclude
+
+###### 2. Function Based api_view
+
+- This wrapper provides a few bits of functionality such as making sure we receive Request instances in our view, and adding to Response objects so that content negotiation can be performed.
+
+- By default only GET methods will be accepted. Other methods will respond with "405 Method Not Allowed".
+
+  > from rest_framework.decorators import api_view
+  >
+  > from rest_framework.response import Response
+  >
+  > @api_view() this works only for GET
+  >
+  > @api_view(['GET','POST','PUT','DELETE'])
+  >
+  > //write your functions here
+
+**Request Object**
+
+- REST framework's Request objects provide flexible request parsing that allows us to treat requests with JSON data or other media types in the same way we would normally deal with form data
+- ***request.data***: returns the parsed content of the request body. this is similar to request.POST and request.FILES attribute except that:
+  - it includes all parsed content, including file and non-file inputs.
+  - supports parsing the content of HTTP methods other than POST, meaning that we can access the content of PUT and PATCH requests.
+  - supports REST framework's flexible request parsing, rather than just supporting form data.
+
+- ***request.method***: returns the uppercased string representation of the request's HTTP method.
+- ***request.query_params***: is more correctly named synonym for request.GET
+
+**Response()**
+
+- REST framework supports HTTP content negotiation by providing a Response class which allows us to return content that can be rendered into multiple content types, depending on the client request.
+
+- syntax:
+
+  > Response(data,status=None,template_name=None,headers=None, content_type =None)
+
+​		data: unrendered , serialized data for the response 
+
+​		status: status code for the response. Defaults to 200
+
+​		template_name: template name to use only if HTMLRenderer or some other custom renderer is       		accepted renderer for the response.
+
+​		headers: dictionary of HTTP headers to use in the response.
+
+​		content_type: The content type of the response 
+
+###### 3. Class Based APIView
+
+- Rest framework provides an APIView class, which subclasses Django's View class.
+- APIView classes are different from regular View classes in the following ways:
+  - Requests passed to the handler methods will be REST framework's Request instances, not Django's HttpRequest instances.
+  - Handler methods may return REST framework's Response, instead of Django's HttpResponse. The view will manage content negotiation and setting the correct renderer on the response.
+  - Any APIException exceptions will be caught and mediated into appropriate responses.
+  - Incoming requests will be authenticated and appropriate permission and/or throttle checks will be run before dispatching the request to the handler method. 
+
+- syntax:
+
+  > from rest_framework.views import APIView
+  >
+  > class AnyName(APIView):
+  >
+  > ​     def get(self,request, format=None):
+  >
+  > ​          //code here
+  >
+  > ​     def post(self,request, format=None):
+  >
+  > ​          //code here
+
+###### 3. Class Based APIView
+
+- The class extends REST framework's APIVIew class, adding commonly required behavior for standard list and detail views.
+- **Attributes**
+  - queryset: The queryset that should be used for returning objects from the view
+  - serializer_class: The serialier class that should be used for validating and deserializing input, and for serializing output.
+  - lookup_field: model field that should be used to for performing object lookup of individual model instances. Defaults to 'pk'.
+  - lookup_url_kwarg: URL keyword argument that should be used for object lookup.
+  - filter_backends: A list of filter backend classes that should be used for filtering the queryset. Defaults to the same value as the DEFAULTS_FILTER_BACKENDS setting.
+
+- **Methods**
+  - get_queryset(self): returns queryset that should be used for list views, and that should be used as the base for lookups in detail views.
+  - get_object(self): returns an object instance that should be used for detail views.
+  - get_serializer_class(self): returns the class that should be used for the serializer.
+  - get_serializer_context(self): returns a dictionary containing any extra context that should be supplied to the serializer.
+  - get_serializer(self, instance=None, many=False, partial=False): returns a serializer instance.
+  - filter_queryset(self,queryset): Given a request, filter it with whichever filter backends are in use, returning a new queryset.
+
+- **Mixins**
+
+  1. ListModelMixin
+
+     - provides a `list(request, *args,**kwargs)` method, that implements listing a queryset
+
+       > from rest_framework.mixins import ListModelMixin
+       >
+       > from rest_framework.generics.import.GenericAPIView
+       >
+       > class AnyList(ListModelMixin, GenericAPIView):
+       >
+       > ​    queryset = //code for queryset
+       >
+       > ​    serializer_class= YourSerializer
+       >
+       > ​    def get(self,request,*args, **kwargs):
+       >
+       > ​        return self.list(request, *args, **kwargs)
+
+  2. CreateModelMixin
+
+     - provides a `create(request, *args,**kwargs)` method, that implements creating and saving a new model instance
+
+     - > from rest_framework.mixins import CreateModelMixin
+       >
+       > from rest_framework.generics.import.GenericAPIView
+       >
+       > class AnyCreate(CreateModelMixin, GenericAPIView):
+       >
+       > ​    queryset = //code for queryset
+       >
+       > ​    serializer_class= YourSerializer
+       >
+       > ​    def post(self,request,*args, **kwargs):
+       >
+       > ​        return self.create(request, *args, **kwargs)
+
+  3. RetrieveModelMixin
+
+     - provides a `retrieve(request, *args,**kwargs)` method, that implements returning an existing model instance in a response
+
+     - >from rest_framework.mixins import RetrieveModelMixin
+       >
+       >from rest_framework.generics.import.GenericAPIView
+       >
+       >class AnyRetrieve(RetrieveModelMixin, GenericAPIView):
+       >
+       >​    queryset = //code for queryset
+       >
+       >​    serializer_class= YourSerializer
+       >
+       >​    def get(self,request,*args, **kwargs):
+       >
+       >​        return self.retieve(request, *args, **kwargs)
+
+  4. UpdateModelMixin
+
+     - provides a `update(request, *args,**kwargs)` method, that implements updating and saving an existing model instance 
+
+     - > from rest_framework.mixins import UpdateModelMixin
+       >
+       > from rest_framework.generics.import.GenericAPIView
+       >
+       > class AnyUpdate(UpdateModelMixin, GenericAPIView):
+       >
+       > ​    queryset = //code for queryset
+       >
+       > ​    serializer_class= YourSerializer
+       >
+       > ​    def put(self,request,*args, **kwargs):
+       >
+       > ​        return self.update(request, *args, **kwargs)
+
+  5. DestroyModelMixin
+
+     - provides a `destroy(request, *args,**kwargs)` method, that implements deletion of an existing model instance
+
+     - > from rest_framework.mixins import DestroyModelMixin
+       >
+       > from rest_framework.generics.import.GenericAPIView
+       >
+       > class AnyDestroy(DestroyModelMixin, GenericAPIView):
+       >
+       > ​    queryset = //code for queryset
+       >
+       > ​    serializer_class= YourSerializer
+       >
+       > ​    def delete(self,request,*args, **kwargs):
+       >
+       > ​        return self.destroy(request, *args, **kwargs)
