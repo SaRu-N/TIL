@@ -2214,16 +2214,17 @@ A page acts like a sequence of Page.object_list when uding len() or iterating it
   >
   > ​          //code here
 
-###### 3. Class Based APIView
+###### 4. Generic APIView
 
 - The class extends REST framework's APIVIew class, adding commonly required behavior for standard list and detail views.
 - **Attributes**
+  
   - queryset: The queryset that should be used for returning objects from the view
   - serializer_class: The serialier class that should be used for validating and deserializing input, and for serializing output.
   - lookup_field: model field that should be used to for performing object lookup of individual model instances. Defaults to 'pk'.
   - lookup_url_kwarg: URL keyword argument that should be used for object lookup.
   - filter_backends: A list of filter backend classes that should be used for filtering the queryset. Defaults to the same value as the DEFAULTS_FILTER_BACKENDS setting.
-
+  
 - **Methods**
   - get_queryset(self): returns queryset that should be used for list views, and that should be used as the base for lookups in detail views.
   - get_object(self): returns an object instance that should be used for detail views.
@@ -2323,3 +2324,273 @@ A page acts like a sequence of Page.object_list when uding len() or iterating it
        > ​    def delete(self,request,*args, **kwargs):
        >
        > ​        return self.destroy(request, *args, **kwargs)
+
+---
+
+## 17 January 2023
+
+###### Today I learned
+
+###### 1. Concrete View Class
+
+The following classes are the concrete generic views:
+
+1. ListAPIView
+
+   - used for read-only endpoints to represent a collection of model instances
+
+   - Extends: GenericAPIView, ListModelMixin
+
+   - > from rest_framework.generics import ListAPIView
+     >
+     > class AnyList(ListAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+2. CreateAPIView
+
+   - used for create-only endpoints of model instances
+
+   - Extends: GenericAPIView, CreateModelMixin
+
+   - > from rest_framework.generics import CreateAPIView
+     >
+     > class AnyCreate(CreateAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+3. RetrieveAPIView
+
+   - used for read-only endpoints to represent a single model instance.
+
+   - Extends: GenericAPIView, RetrieveModelMixin
+
+   - > from rest_framework.generics import RetrieveAPIView
+     >
+     > class AnyRetrieve(RetrieveAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+4. UpdateAPIView
+
+   - used for update-only endpoints for a single model instance.
+
+   - Extends: GenericAPIView, UpdateModelMixin
+
+   - > from rest_framework.generics import UpdateAPIView
+     >
+     > class AnyUpdate(UpdateAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+5. DestroyAPIView
+
+   - used for delete-only endpoints to represent a single model instance.
+
+   - Extends: GenericAPIView, DestroyModelMixin
+
+   - > from rest_framework.generics import DestroyAPIView
+     >
+     > class AnyDestroy(DestroyAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+6. ListCreateAPIView
+
+   - used for read-write endpoints to represent a collection of model instancs.
+
+   - Extends: GenericAPIView, CreateModelMixin,ListModelMixin
+
+   - > from rest_framework.generics import ListCreateAPIView
+     >
+     > class AnyListCreate(ListCreateAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+7. RetrieveUpdateAPIView
+
+   - used for read or update endpoints to represent a single model instance.
+
+   - Extends: GenericAPIView, UpdateModelMixin, RetrieveModelMixin
+
+   - > from rest_framework.generics import RetrieveUpdateAPIView
+     >
+     > class AnyRetrieveUpdate(RetrieveUpdateAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+8. RetrieveDestroyAPIView
+
+   - used for read or delete endpoints to represent a single model instance.
+
+   - Extends: GenericAPIView, DestroyModelMixin, RetriieveModelMixin
+
+   - > from rest_framework.generics import RetrieveDestroyAPIView
+     >
+     > class AnyRetrieveDestroy(RetrieveDestroyAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+9. RetrieveUpdateDestroyAPIView
+
+   - used for read-write-delete endpoints to represent a single model instance.
+
+   - Extends: GenericAPIView, DestroyModelMixin, RetrieveModelMixin, UpdateModelMixin
+
+   - > from rest_framework.generics import RetrieveUpdateDestroyAPIView
+     >
+     > class AnyRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+     >
+     > ​    queryset=//code for queryset
+     >
+     > ​    serializer_class= YourSerializer    
+
+###### 2. ViewSet in DRF
+
+- DRF allows us to combine the logic for a set of related views in a single class, called a ViewSet
+
+**ViewSet Class**
+
+- is simply a type of class-based View without method handlers but provides actions such as 
+
+  - list(), retrieve(), create(), update(), partial_update(), destroy()
+
+- > from rest_framework import viewsets
+  >
+  > class AnyViewSet(viewsets.ViewSet):
+  >
+  > ​     def list(self,request): .......
+  >
+  > ​     def create(self,request): .......
+  >
+  > ​     def retrieve(self,request,pk=None): .......
+  >
+  > ​     def update(self,request,pk=None): .......
+  >
+  > ​     def partial_update(self,request,pk=None): .......
+  >
+  > ​     def destroy(self,request,pk=None): .......
+
+- During dispatch, following attributes are available on the VIewSet:
+  - basename: base to use for the URL names that are created.
+  - action: name of the current action
+  - detail: boolean indicating if the current action is configured for a list or detail view.
+  - suffix: display suffix for viewset type
+  - name: display name for the viewset. mutually exclusive to suffix
+  - description: display description for the individual view of a viewset
+
+**ViewSet- URL Config**
+
+- >from django.urls import path,include
+  >
+  >from app import views
+  >
+  >from rest_framework.routers import DefaultRouter
+  >
+  >router=DefaultRouter()
+  >
+  >router.register('path_name',views.AnyViewSet,basename='anybasename')
+  >
+  >urlpatterns=[
+  >
+  >​     path('',include(route.urls)),
+  >
+  >]
+
+###### 3. ModelViewSet in DRF
+
+- ModelViewSet class inherits from GenericAPIView and includes implementations for various actions, by mixing in the behaviour of the various mixin classes.
+
+- Actions provided by the ModelViewSet class are list(), retrieve(), create(), update(), partial_update(), and destroy(). 
+
+- > class AnyViewSet(viewsets.ModelViewSet):
+  >
+  > ​       queryset =//query code
+  >
+  > ​       serializer_class =AnySerializer
+
+**ReadOnlyModelViewSet**
+
+- also inherits from GenericAPIView and includes implementations for various actions, but only provides the 'read-only' actions, list() and retrieve()
+
+- >class AnyViewSet(viewsets.ReadOnlyModelViewSet):
+  >
+  >​       queryset =//query code
+  >
+  >​       serializer_class =AnySerializer
+
+###### 4. Authentication and Permission Class in DRF
+
+**Authentication**
+
+- DRF provides a number of authentication schemes out of the box and allows us to implement custom schemes
+
+  1. BasicAuthentication
+
+     - uses HTTP Basic Authentication, signed against a user's username and password
+     - generally only appropriate for testing
+     - if successfully authenticated, it provides following credentials:
+       - request.user will be a Django User instance
+       - request.auth will be None
+
+     - unauthenticated responses that are denied permission will result in an HTTP 401 Unauthorized response with an appropriate WWW-Authenticate header
+
+  2. SessionAuthentication
+
+     - uses Django's default session backend for  authentication
+     - appropriate for AJAX clients that are running in the same session context as our website
+     - if successfully authenticated, it provides following credentials:
+       - request.user will be a Django User instance
+       - request.auth will be None
+
+     - unauthenticated responses that are denied permission will result in an HTTP 403 Forbidden response.
+     - while using an AJAX style API with SessionAuthentication, we need to make sure we include a valid CSRF token for any "unsafe" HTTP method calls, such as PUT,PATCH,POST, or DELETE requests.
+
+  3. TokenAuthentication
+
+  4. RemoteUserAuthentication
+
+  5. Custom authentication
+
+**Permission Classes**
+
+-  Permissions in DRF are always defined as a list of permission classes
+
+  1. AllowAny
+
+     will allow unrestricted access, regardless of if the request was authenticated or unauthenticated
+
+  2. IsAuthenticated
+
+     will deny permission to any unauthenticated user, and allow permission otherwise
+
+  3. IsAdminUser
+
+     will deny permission to any  user, unless user.is_staff is True in which case permission will be allowed
+
+  4. IsAuthenticatedOrReadOnly
+
+  5. DjangoModelPermissions
+
+  6. DjangoModelPermissionsOrAnonReadOnly
+
+  7. DjangoObjectPermissions
+
+  8. Custom Permissions
+
