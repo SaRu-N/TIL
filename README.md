@@ -2673,4 +2673,43 @@ The following classes are the concrete generic views:
 
 4. Using Signals
 
-   
+---
+
+## 20 January 2023
+
+###### Today i learned
+
+###### 1. httpie
+
+- HTTPie is command line HTTP client.
+
+- provides a simple http command that allows for sending arbitrary HTTP requests using a simple and natural syntax, and displays colorized output.
+
+- > http [flags] [METHOD] URL [ITEM[ITEM]]
+
+- Using httpie
+
+  - GET request:
+
+    > http http://127.0.0.1:8000/path
+
+  - GET Request with Auth:
+
+    > http http://127.0.0.1:8000/path/'Authorization:Token token_key'
+
+  - POST Request/ Submitting Form:
+
+    > http -f POST http://127.0.0.1:8000/path/name=name roll=roll city=city 'Authorization:Token token_key'
+
+  - PUT Request:
+
+    > http -f POST http://127.0.0.1:8000/path/id/name=name roll=roll city=city 'Authorization:Token token_key'
+
+  - Delete Request:
+
+    > http DELETE http://127.0.0.1:8000/path/id/ 'Authorization:Token token_key'
+
+###### 2. Custom Authentication
+
+- To implement a custom authentication scheme, subclass BaseAuhentication and override the `authenticate(self,request)` method
+- The method should return a two-tuple of (user,auth) if authentication succeeds, or None otherwise
