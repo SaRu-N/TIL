@@ -2586,11 +2586,91 @@ The following classes are the concrete generic views:
 
   4. IsAuthenticatedOrReadOnly
 
+     will allow authenticated users to perform any request. Unauthorized users will only be permitted if the request method is one of the "safe" methods; GET, HEAD, OPTIONS.
+
   5. DjangoModelPermissions
 
+     This ties into Djando's standard django.contrib.auth model permissions. This must only be applied to views that have queryset propertyset.
+
+     Authorization will only be granted if the user is authenticated and has the relevant model permissions assigned.
+  
   6. DjangoModelPermissionsOrAnonReadOnly
-
+  
+     Similar to DjangoModelPermissions, but also allows unauthenticated users to have read-only access to the API.
+  
   7. DjangoObjectPermissions
-
+  
+     This ties into Django's standard object permissions framework that allows per-object permissions on models. to use this permission class, we need to add a permission backend that supports object-level permissions, such as django-guardian
+  
   8. Custom Permissions
+  
+     To implement a custom permission, override BasePermission and implement either, or both, of the following methods:
+  
+     - has_permission(self, request, view)
+  
+     - has_object_permission(self, request, view, obj)
+  
+       The methods should return True if the request should be granted access, and False otherwise
+  
+       > in custompermissions.py
+       >
+       > class MyPermission(BasePermission):
+       >
+       > ​     def has_permission(self, request, view):
 
+---
+
+## 19 January 2023
+
+###### Today i learned
+
+###### 1. Token Authentication
+
+- This authentication scheme uses a simple token-based HTTP Authentication scheme. It is appropriate for client-server setups, such as native desktop and mobile clients.
+
+> INSTALLED_APPS=[
+>
+> ​           ...
+>
+> ​           'rest_framework.authtoken'
+>
+> ]
+
+- if successfully authenticated, it provides following credentials:
+
+  - request.user will be a Django User instance
+
+  - request.auth will be rest_framework.authtoken.models.Token instance
+
+- unauthenticated responses that are denied permission will result in an HTTP 401 Unauthorized response with an appropriate WWW-Authenticate header.
+- The http command line tool may be useful for testing token authenticated APIs.
+
+**Token Generation**
+
+1. Using Admin Application
+
+2. Using Django manage.py command
+
+   ​	`python manage.py drf_create_token<username>`: This command will return API Token for the given user or Creates a Token if token doesn't exist for user.
+
+3. By exposing an API endpoint
+
+   REST framework provides a built-in view to provide this behavior. To use it, add the obtain_auth_token view to our URLconf: 
+
+   > from rest_framework.authtoken.views import obtain_auth_token
+   >
+   > urlpatterns=[
+   >
+   > ​        path('anyname/',obtain_auth_token)
+   >
+   > ]
+
+   The obtain_auth_token view will return a JSON response when valid username and password fields are POSTed to the view using form data or JSON:
+
+   > http POST http://127.0.0.1:8000/anyname/ username="name" password="pass"
+
+   It also generates token if the token is not generated for the provided user.
+
+4. Using Signals
+
+   
