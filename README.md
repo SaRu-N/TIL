@@ -2713,3 +2713,49 @@ The following classes are the concrete generic views:
 
 - To implement a custom authentication scheme, subclass BaseAuhentication and override the `authenticate(self,request)` method
 - The method should return a two-tuple of (user,auth) if authentication succeeds, or None otherwise
+
+---
+
+## 23 January 2023
+
+###### Today i learned
+
+###### 1. JWT Authentication
+
+- is a fairly new standard which can be used for token-based authentication. It doesn't need to use a database to validate a token
+
+**Simple JWT**
+
+- provides a JSON web token authentication backend for the DRF.
+
+- Install JWT:
+
+  > pip install djangorestframework-simplejwt
+
+- Configure Simple JWT
+
+  -  globally
+
+    > settings.py
+    >
+    > REST_FRAMEWORK=[
+    >
+    > ​       'DEFAULT_AUTHENTICATION_CLASSES':('rest_framework_simplejwt.authentication.JWTAuthentication',)
+    >
+    > ]
+
+  - urls.py 
+
+    > rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+    >
+    > urlpatterns=[
+    >
+    > ​        path('gettoken/', TokenObtainPairView.as_view(),name='token_obtain_pair'),
+    >
+    > ​        path('refreshtoken/', TokenRefreshView.as_view(),name='token_refresh'),
+    >
+    > ]
+
+###### 2. Filtering in DRF
+
+- Simplest way to filter the queryset of any view that subclasses GenericAPIView is to override the .get_queryset() method.
