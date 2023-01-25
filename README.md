@@ -2758,4 +2758,54 @@ The following classes are the concrete generic views:
 
 ###### 2. Filtering in DRF
 
-- Simplest way to filter the queryset of any view that subclasses GenericAPIView is to override the .get_queryset() method.
+- Simplest way to filter the queryset of any view that subclasses GenericAPIView is to override the .get_queryset() method
+
+- **DjangoFilterBackend**
+
+  includes a DjangoFilterBackend class which supports highly customizable field for REST framework.
+
+  To install and configure
+
+  > pip install django-filter
+
+  > INSTALLED_APPS=[
+  >
+  > ​       'django_filters',
+  >
+  > ]
+
+  global setting
+
+  > settings.py
+  >
+  > REST_FRAMEWORK={
+  >
+  > ​       'DEFAULT_FILTER_BACKENDS':['django_filter.rest_framework.DjangoFilterBackend']
+  >
+  > }
+
+  Per View Setting
+
+  can set filter backends on a per-view, or per-viewset basis, using the GenericAPIView class-based views.
+
+  > from django_filters.rest_framework import DjangoFilterBackend
+  >
+  > class AnyAPI(ListAPIView):
+  >
+  > ​            //queryset and serializer_class
+  >
+  > ​			filter_backends =[DjangoFilterBackend]			
+
+  To use
+
+  can set a filterset_fields attribute on the view, or viewset, listing the set of fields we wish to filter against.
+
+  > class AnyAPI(ListAPIView):
+  >
+  > ​            //queryset and serializer_class
+  >
+  > ​			filter_backends =[DjangoFilterBackend]
+  >
+  > ​			filterset_fields =['field1','field2']
+
+  
